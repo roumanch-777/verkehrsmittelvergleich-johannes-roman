@@ -1,3 +1,5 @@
+import { TravelMode } from "../models/travel-mode-file";
+
 class RawTravelData {
     durationSeconds: number;
     distanceMeters: number;
@@ -30,15 +32,15 @@ const sampleResponse = {
 }
 
 
-function getTravelInfo(from: string, to: string, means: string): FormattedTravelData {
-    const rawTravelData = makeApiCall(from, to, means);
+export function getTravelInfo(from: string, to: string, mode: TravelMode): FormattedTravelData {
+    const rawTravelData = makeApiCall(from, to, mode);
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
     return new FormattedTravelData(formattedTime, distanceString);
 }
 
 
-function makeApiCall(from: string, to: string, means: string): RawTravelData {
+function makeApiCall(from: string, to: string, mode: TravelMode): RawTravelData {
     const raw = sampleResponse.routes[0];
     const distanceMeters = raw.distanceMeters;
     const durationSeconds = parseInt(raw.duration.replace(/s$/, ""));
@@ -78,6 +80,3 @@ function computeTimeString(seconds_total: number): string {
     }
     return formattedTime
 }
-
-
-export default getTravelInfo;

@@ -1,11 +1,14 @@
-import getTravelInfo from "../api/google-maps-routes-api";
+import { getTravelInfo } from "../api/google-maps-routes-api";
+import { TravelMode } from "../models/travel-mode-file";
 
 
 const ComparisonTable = () => {
-    const car_info = getTravelInfo("Bern", "Zürich", "car");
-    const public_transport_info = getTravelInfo("Bern", "Zürich", "public_transport");
-    const bike_info = getTravelInfo("Bern", "Zürich", "bike");
-    
+    const car_info = getTravelInfo("Bern", "Zürich", TravelMode.DRIVE);
+    const public_transport_info = getTravelInfo("Bern", "Zürich", TravelMode.TRANSIT);
+    const bike_info = getTravelInfo("Bern", "Zürich", TravelMode.BICYCLE);
+    const walk_info = getTravelInfo("Bern", "Zürich", TravelMode.WALK);
+    const two_wheeler_info = getTravelInfo("Bern", "Zürich", TravelMode.TWO_WHEELER);
+
     return <table>
         <th>Resultate</th>
         <tr>
@@ -27,6 +30,16 @@ const ComparisonTable = () => {
             <td>Velo</td>
             <td>{bike_info.formattedDistance}</td>
             <td>{bike_info.formattedTime}</td>
+        </tr>
+        <tr>
+            <td>Fussgänger</td>
+            <td>{walk_info.formattedDistance}</td>
+            <td>{walk_info.formattedTime}</td>
+        </tr>
+        <tr>
+            <td>Motorrad</td>
+            <td>{two_wheeler_info.formattedDistance}</td>
+            <td>{two_wheeler_info.formattedTime}</td>
         </tr>
     </table>;
 };
