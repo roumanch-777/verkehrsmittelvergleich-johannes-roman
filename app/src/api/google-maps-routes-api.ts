@@ -1,4 +1,4 @@
-import { TravelMode } from "../models/travel-mode-file";
+import { TravelMode } from "../models/travel-mode";
 
 class RawTravelData {
     durationSeconds: number;

@@ -1,5 +1,5 @@
 import { getTravelInfo } from "../api/google-maps-routes-api";
-import { TravelMode } from "../models/travel-mode-file";
+import { TravelMode } from "../models/travel-mode";
 
 
 const ComparisonTable = () => {
