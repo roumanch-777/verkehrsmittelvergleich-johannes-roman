@@ -32,7 +32,7 @@ const sampleResponse = {
 }
 
 
-export function getTravelInfo(from: string, to: string, mode: TravelMode): FormattedTravelData {
+export function getTravelData(from: string, to: string, mode: TravelMode): FormattedTravelData {
     const rawTravelData = makeApiCall(from, to, mode);
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
