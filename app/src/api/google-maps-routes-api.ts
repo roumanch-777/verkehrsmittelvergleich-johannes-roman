@@ -85,7 +85,8 @@ function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
         "Referer": referer,
         "X-Goog-FieldMask": "routes.duration,routes.distanceMeters",
     };
-    const response = fetch(url, {
+    let result: ApiResponse;
+    fetch(url, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(payload)
@@ -94,9 +95,9 @@ function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
         return response.json()
     })
     .then(data => {
-        return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
+        result = new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
     });
-    return response;
+    return result;
 }
 
 
