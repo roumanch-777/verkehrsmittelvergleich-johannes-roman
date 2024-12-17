@@ -1,4 +1,5 @@
 import { TravelMode } from "../models/travel-mode";
+import { from, map } from "rxjs";
 
 
 const USE_REAL_API = false;
@@ -48,10 +49,10 @@ export function getTravelData(from: string, to: string, mode: TravelMode): Forma
 }
 
 
-function getRawData(from: string, to: string, mode: TravelMode): RawTravelData {
+function getRawData(from_location: string, to_location: string, mode: TravelMode): RawTravelData {
     let raw: ApiResponse;
     if (USE_REAL_API) {
-        raw = makeApiCall(from, to, mode);
+        from(makeApiCall(from_location, to_location, mode)).pipe(map(response => {raw = response}));
     } else {
         raw = sampleResponse;
     }
@@ -61,7 +62,7 @@ function getRawData(from: string, to: string, mode: TravelMode): RawTravelData {
 }
 
 
-function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
+async function makeApiCall(from: string, to: string, mode: TravelMode): Promise<ApiResponse> {
     const apiKey = process.env.REACT_APP_API_KEY;
     if (!apiKey) {
         throw new Error("No API key found");
@@ -90,13 +91,7 @@ function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
         headers: headers,
         body: JSON.stringify(payload)
     })
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
-    });
-    return response;
+    return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
 }
 
 
