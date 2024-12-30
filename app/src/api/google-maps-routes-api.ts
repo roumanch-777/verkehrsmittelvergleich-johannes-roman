@@ -2,6 +2,16 @@ import { TravelMode } from "../models/travel-mode";
 
 
 const USE_REAL_API = false;
+let apiKey = ensure_string(process.env.REACT_APP_API_KEY);
+const referer = ensure_string(process.env.REACT_APP_REFERER);
+
+
+function ensure_string(str: string | undefined | void): string {
+    if (!str) {
+        throw new Error(`Not a valid string: ${str}`);
+    }
+    return str;
+}
 
 
 class RawTravelData {
@@ -62,14 +72,6 @@ function getRawData(from: string, to: string, mode: TravelMode): RawTravelData {
 
 
 function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
-    const apiKey = process.env.REACT_APP_API_KEY;
-    if (!apiKey) {
-        throw new Error("No API key found");
-    }
-    const referer = process.env.REACT_APP_REFERER;
-    if (!referer) {
-        throw new Error("No referer found");
-    }
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload = {
         "origin": {"address": from},
