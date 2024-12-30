@@ -2,8 +2,8 @@ import { TravelMode } from "../models/travel-mode";
 
 
 const USE_REAL_API = false;
-let apiKey = ensure_string(process.env.REACT_APP_API_KEY);
-const referer = ensure_string(process.env.REACT_APP_REFERER);
+const API_KEY = ensure_string(process.env.REACT_APP_API_KEY);
+const REFERER = ensure_string(process.env.REACT_APP_REFERER);
 
 
 function ensure_string(str: string | undefined | void): string {
@@ -83,8 +83,8 @@ function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
     };
     const headers = {
         "Content-Type": "application/json",
-        "X-Goog-Api-Key": apiKey,
-        "Referer": referer,
+        "X-Goog-Api-Key": API_KEY,
+        "Referer": REFERER,
         "X-Goog-FieldMask": "routes.duration,routes.distanceMeters",
     };
     let result: ApiResponse;
