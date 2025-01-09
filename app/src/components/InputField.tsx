@@ -1,14 +1,23 @@
 import React from "react";
 
 interface Props {
-    children: string;
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
 }
 
-function InputField({children}: Props) {
+function InputField({label, value, onChange}: Props) {
     return (
         <>
-            <label htmlFor={children}>{children}:</label>
-            <input type="text" id={children} name={children}/>
+            <label htmlFor={label}>{label}:</label>
+            <input
+                type="text"
+                id={label}
+                name={label}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+            >
+            </input>
         </>)
 }
 
