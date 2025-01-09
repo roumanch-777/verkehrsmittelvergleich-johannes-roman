@@ -4,6 +4,8 @@ import ComparisonTable from './components/ComparisonTable';
 import InputField from './components/InputField'
 import Button from './components/Button'
 import DatumPicker from "./components/DatumPicker";
+import { getTravelData } from "./api/google-maps-routes-api";
+import { TravelMode } from './models/travel-mode';
 
 function App() {
 
@@ -32,6 +34,8 @@ function App() {
         };
 
         console.log("Daten an Backend senden:", requestData);
+        
+        getTravelData(from, to, TravelMode.DRIVE);
     };
 
     return (

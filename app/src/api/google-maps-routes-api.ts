@@ -1,5 +1,19 @@
 import { TravelMode } from "../models/travel-mode";
 
+
+const USE_REAL_API = false;
+const API_KEY = ensure_string(process.env.REACT_APP_API_KEY);
+const REFERER = ensure_string(process.env.REACT_APP_REFERER);
+
+
+function ensure_string(str: string | undefined | void): string {
+    if (!str) {
+        throw new Error(`Not a valid string: ${str}`);
+    }
+    return str;
+}
+
+
 class RawTravelData {
     durationSeconds: number;
     distanceMeters: number;
@@ -11,40 +25,66 @@ class RawTravelData {
 }
 
 
-class FormattedTravelData {
-    formattedTime: string;
-    formattedDistance: string;
+class ApiResponse {
+    "distanceMeters": number
+    "duration": string
 
-    constructor(formattedTime: string, formattedDistance: string) {
-        this.formattedTime = formattedTime;
-        this.formattedDistance = formattedDistance;
+    constructor(distanceMeters: number, duration: string) {
+        this.distanceMeters = distanceMeters;
+        this.duration = duration;
     }
 }
 
 
-const sampleResponse = {
-    "routes": [
-        {
-            "distanceMeters": 121556,
-            "duration": "5535s"
-        }
-    ]
+const sampleResponse = new ApiResponse(121556, "5535s")
+
+
+export function getTravelData(from: string, to: string, mode: TravelMode): void {
+    getRawData(from, to, mode).then(rawTravelData => {
+        const formattedTime = computeTimeString(rawTravelData.durationSeconds);
+        const distanceString = computeDistanceString(rawTravelData.distanceMeters);
+        console.log(`${mode}:\t\t${distanceString} \t\t${formattedTime}`);
+    });
 }
 
 
-export function getTravelData(from: string, to: string, mode: TravelMode): FormattedTravelData {
-    const rawTravelData = makeApiCall(from, to, mode);
-    const formattedTime = computeTimeString(rawTravelData.durationSeconds);
-    const distanceString = computeDistanceString(rawTravelData.distanceMeters);
-    return new FormattedTravelData(formattedTime, distanceString);
+function getRawData(from: string, to: string, mode: TravelMode): Promise<RawTravelData> {
+    if (USE_REAL_API) {
+        makeApiCall(from, to, mode).then(raw => {
+            return new RawTravelData(raw.distanceMeters, parseInt(raw.duration.replace(/s$/, "")));           
+        });
+    } else {
+        return new RawTravelData(sampleResponse.distanceMeters, parseInt(sampleResponse.duration.replace(/s$/, "")));
+    }
 }
 
 
-function makeApiCall(from: string, to: string, mode: TravelMode): RawTravelData {
-    const raw = sampleResponse.routes[0];
-    const distanceMeters = raw.distanceMeters;
-    const durationSeconds = parseInt(raw.duration.replace(/s$/, ""));
-    return new RawTravelData(distanceMeters, durationSeconds);
+async function makeApiCall(from: string, to: string, mode: TravelMode): Promise<ApiResponse> {
+    const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
+    const payload = {
+        "origin": {"address": from},
+        "destination": {"address": to},
+        "travelMode": "TRANSIT",
+        "routingPreference": "TRAFFIC_AWARE",
+        "departureTime": new Date().toISOString(),
+        "languageCode": "de-CH",
+    };
+    const headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": API_KEY,
+        "Referer": REFERER,
+        "X-Goog-FieldMask": "routes.duration,routes.distanceMeters",
+    };
+    const response = fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(payload)
+    }).then(response => {
+        if(!response.ok) throw new Error(response.statusText);
+        return response.json();
+    }).then(data => {
+        return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
+    }).catch(err => console.warn(err));
 }
 
 
