@@ -42,7 +42,7 @@ function App() {
             <InputField label="Bis" value={to} onChange={setTo}/>
             <DatumPicker label="Ankunft" value={arrivalTime} onChange={setArrivalTime}/>
             <Button onClick={handleSubmit}>Absenden</Button>
-            <ComparisonTable/>
+            <ComparisonTable all_travel_data={}/>
         </div>
     );
 }

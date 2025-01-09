@@ -36,6 +36,30 @@ class FormattedTravelData {
 }
 
 
+export class AllTravelData {
+    drive: FormattedTravelData
+    bicycle: FormattedTravelData
+    walk: FormattedTravelData
+    two_wheeler: FormattedTravelData
+    transit: FormattedTravelData
+
+    constructor(
+        drive: FormattedTravelData,
+        bicycle: FormattedTravelData,
+        walk: FormattedTravelData,
+        two_wheeler: FormattedTravelData,
+        transit: FormattedTravelData,
+    ) {
+        this.drive = drive;
+        this.bicycle = bicycle;
+        this.walk = walk;
+        this.two_wheeler= two_wheeler;
+        this.transit = transit;
+    }
+
+}
+
+
 class ApiResponse {
     "distanceMeters": number
     "duration": string
@@ -50,7 +74,7 @@ class ApiResponse {
 const sampleResponse = new ApiResponse(121556, "5535s")
 
 
-export function getTravelData(from: string, to: string, mode: TravelMode): FormattedTravelData {
+function getTravelData(from: string, to: string, mode: TravelMode): FormattedTravelData {
     const rawTravelData = getRawData(from, to, mode);
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
