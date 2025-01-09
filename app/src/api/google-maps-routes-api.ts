@@ -87,19 +87,15 @@ function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
         "Referer": REFERER,
         "X-Goog-FieldMask": "routes.duration,routes.distanceMeters",
     };
-    let result: ApiResponse;
-    fetch(url, {
+    const response = await fetch(url, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(payload)
-    })
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        result = new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
     });
-    return result;
+    if(!response.ok) throw new Error(response.statusText);
+    const data = await response.json();
+    const result = new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
+    return result;  // problem: this line is reached before the response arrives
 }
 
 
