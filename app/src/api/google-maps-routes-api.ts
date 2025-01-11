@@ -75,27 +75,27 @@ const sampleResponse = new ApiResponse(121556, "5535s")
 
 
 export async function getAllTravelData(from: string, to: string, departureTime: Date, arrivalTime: Date, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
-    const drive = await getTravelData(from, to, TravelMode.DRIVE);
-    const bicycle = await getTravelData(from, to, TravelMode.BICYCLE);
-    const walk = await getTravelData(from, to, TravelMode.WALK);
-    const two_wheeler = await getTravelData(from, to, TravelMode.TWO_WHEELER);
-    const transit = await getTravelData(from, to, TravelMode.TRANSIT);
+    const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
+    const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
+    const walk = await getTravelData(from, to, departureTime, TravelMode.WALK);
+    const two_wheeler = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
+    const transit = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     setAllTravelData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
 }
 
 
-async function getTravelData(from: string, to: string, mode: TravelMode): Promise<FormattedTravelData> {
-    const rawTravelData = await getRawData(from, to, mode);
+async function getTravelData(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<FormattedTravelData> {
+    const rawTravelData = await getRawData(from, to, departureTime, mode);
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
     return new FormattedTravelData(formattedTime, distanceString);
 }
 
 
-async function getRawData(from: string, to: string, mode: TravelMode): Promise<RawTravelData> {
+async function getRawData(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<RawTravelData> {
     let raw: ApiResponse;
     if (USE_REAL_API) {
-        raw = await makeApiCall(from, to, mode);
+        raw = await makeApiCall(from, to, departureTime, mode);
     } else {
         raw = sampleResponse;
     }
@@ -105,14 +105,14 @@ async function getRawData(from: string, to: string, mode: TravelMode): Promise<R
 }
 
 
-async function makeApiCall(from: string, to: string, mode: TravelMode): Promise<ApiResponse> {
+async function makeApiCall(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<ApiResponse> {
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload = {
         "origin": {"address": from},
         "destination": {"address": to},
         "travelMode": mode,
         "routingPreference": "TRAFFIC_AWARE",
-        "departureTime": new Date().toISOString(),
+        "departureTime": departureTime.toISOString(),
         "languageCode": "de-CH",
     };
     const headers = {
