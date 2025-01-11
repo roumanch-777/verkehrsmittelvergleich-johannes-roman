@@ -1,5 +1,18 @@
 import { TravelMode } from "../models/travel-mode";
 
+
+const USE_REAL_API = false;
+const API_KEY = ensure_string(process.env.REACT_APP_API_KEY);
+
+
+function ensure_string(str: string | undefined | void): string {
+    if (!str) {
+        throw new Error(`Not a valid string: ${str}`);
+    }
+    return str;
+}
+
+
 class RawTravelData {
     durationSeconds: number;
     distanceMeters: number;
@@ -22,29 +35,100 @@ class FormattedTravelData {
 }
 
 
-const sampleResponse = {
-    "routes": [
-        {
-            "distanceMeters": 121556,
-            "duration": "5535s"
-        }
-    ]
+export class AllTravelData {
+    drive: FormattedTravelData
+    bicycle: FormattedTravelData
+    walk: FormattedTravelData
+    two_wheeler: FormattedTravelData
+    transit: FormattedTravelData
+
+    constructor(
+        drive: FormattedTravelData,
+        bicycle: FormattedTravelData,
+        walk: FormattedTravelData,
+        two_wheeler: FormattedTravelData,
+        transit: FormattedTravelData,
+    ) {
+        this.drive = drive;
+        this.bicycle = bicycle;
+        this.walk = walk;
+        this.two_wheeler= two_wheeler;
+        this.transit = transit;
+    }
+
 }
 
 
-export function getTravelData(from: string, to: string, mode: TravelMode): FormattedTravelData {
-    const rawTravelData = makeApiCall(from, to, mode);
+class ApiResponse {
+    "distanceMeters": number
+    "duration": string
+
+    constructor(distanceMeters: number, duration: string) {
+        this.distanceMeters = distanceMeters;
+        this.duration = duration;
+    }
+}
+
+
+const sampleResponse = new ApiResponse(121556, "5535s")
+
+
+export async function getAllTravelData(from: string, to: string, departureTime: Date, arrivalTime: Date, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
+    const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
+    const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
+    const walk = await getTravelData(from, to, departureTime, TravelMode.WALK);
+    const two_wheeler = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
+    const transit = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
+    setAllTravelData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
+}
+
+
+async function getTravelData(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<FormattedTravelData> {
+    const rawTravelData = await getRawData(from, to, departureTime, mode);
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
     return new FormattedTravelData(formattedTime, distanceString);
 }
 
 
-function makeApiCall(from: string, to: string, mode: TravelMode): RawTravelData {
-    const raw = sampleResponse.routes[0];
+async function getRawData(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<RawTravelData> {
+    let raw: ApiResponse;
+    if (USE_REAL_API) {
+        raw = await makeApiCall(from, to, departureTime, mode);
+    } else {
+        raw = sampleResponse;
+    }
     const distanceMeters = raw.distanceMeters;
     const durationSeconds = parseInt(raw.duration.replace(/s$/, ""));
     return new RawTravelData(distanceMeters, durationSeconds);
+}
+
+
+async function makeApiCall(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<ApiResponse> {
+    const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
+    const payload = {
+        "origin": {"address": from},
+        "destination": {"address": to},
+        "travelMode": mode,
+        "routingPreference": "TRAFFIC_AWARE",
+        "departureTime": departureTime.toISOString(),
+        "languageCode": "de-CH",
+    };
+    const headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": API_KEY,
+        "X-Goog-FieldMask": "routes.duration,routes.distanceMeters",
+    };
+    const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(payload)
+    });
+    if(!response.ok) {
+        throw new Error();
+    };
+    const data = await response.json();
+    return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
 }
 
 
