@@ -2,11 +2,13 @@ import { AllTravelData } from "../api/google-maps-routes-api";
 
 
 interface ComparisonTableProps {
-    all_travel_data: AllTravelData;
+    all_travel_data: AllTravelData | null;
 }
 
 const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
-
+    if (!all_travel_data) {
+        return null;
+    }
     return (
         <table>
             <thead>
