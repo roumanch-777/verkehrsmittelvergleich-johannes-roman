@@ -3,7 +3,6 @@ import { TravelMode } from "../models/travel-mode";
 
 const USE_REAL_API = false;
 const API_KEY = ensure_string(process.env.REACT_APP_API_KEY);
-const REFERER = ensure_string(process.env.REACT_APP_REFERER);
 
 
 function ensure_string(str: string | undefined | void): string {
@@ -118,7 +117,6 @@ async function makeApiCall(from: string, to: string, departureTime: Date, mode: 
     const headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": API_KEY,
-        "Referer": REFERER,
         "X-Goog-FieldMask": "routes.duration,routes.distanceMeters",
     };
     const response = await fetch(url, {
@@ -126,7 +124,9 @@ async function makeApiCall(from: string, to: string, departureTime: Date, mode: 
         headers: headers,
         body: JSON.stringify(payload)
     });
-    if(!response.ok) throw new Error(response.statusText);
+    if(!response.ok) {
+        throw new Error();
+    };
     const data = await response.json();
     return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
 }
