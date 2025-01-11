@@ -4,6 +4,7 @@ import ComparisonTable from './components/ComparisonTable';
 import InputField from './components/InputField'
 import Button from './components/Button'
 import DatumPicker from "./components/DatumPicker";
+import { AllTravelData, getAllTravelData } from './api/google-maps-routes-api';
 
 function App() {
 
@@ -11,6 +12,8 @@ function App() {
     const [to, setTo] = useState("");
     const [departureTime, setDepartureTime] = useState<Date | null>(new Date());
     const [arrivalTime, setArrivalTime] = useState<Date | null>(null);
+
+    const [allTravelData, setAllTravelData] = useState<AllTravelData | null>(null);
 
     const handleSubmit = () => {
         console.log("Von:", from);
@@ -23,15 +26,7 @@ function App() {
             return;
         }
 
-        // Werte verarbeiten (z. B. an ein Backend senden)
-        const requestData = {
-            from,
-            to,
-            departureTime,
-            arrivalTime,
-        };
-
-        console.log("Daten an Backend senden:", requestData);
+        getAllTravelData(from, to, departureTime, arrivalTime, setAllTravelData);
     };
 
     return (
@@ -42,7 +37,7 @@ function App() {
             <InputField label="Bis" value={to} onChange={setTo}/>
             <DatumPicker label="Ankunft" value={arrivalTime} onChange={setArrivalTime}/>
             <Button onClick={handleSubmit}>Absenden</Button>
-            <ComparisonTable all_travel_data={null}/>
+            <ComparisonTable all_travel_data={allTravelData}/>
         </div>
     );
 }

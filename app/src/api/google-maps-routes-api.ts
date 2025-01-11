@@ -74,18 +74,28 @@ class ApiResponse {
 const sampleResponse = new ApiResponse(121556, "5535s")
 
 
-function getTravelData(from: string, to: string, mode: TravelMode): FormattedTravelData {
-    const rawTravelData = getRawData(from, to, mode);
+export async function getAllTravelData(from: string, to: string, departureTime: Date, arrivalTime: Date, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
+    const drive = await getTravelData(from, to, TravelMode.DRIVE);
+    const bicycle = await getTravelData(from, to, TravelMode.BICYCLE);
+    const walk = await getTravelData(from, to, TravelMode.WALK);
+    const two_wheeler = await getTravelData(from, to, TravelMode.TWO_WHEELER);
+    const transit = await getTravelData(from, to, TravelMode.TRANSIT);
+    setAllTravelData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
+}
+
+
+async function getTravelData(from: string, to: string, mode: TravelMode): Promise<FormattedTravelData> {
+    const rawTravelData = await getRawData(from, to, mode);
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
     return new FormattedTravelData(formattedTime, distanceString);
 }
 
 
-function getRawData(from: string, to: string, mode: TravelMode): RawTravelData {
+async function getRawData(from: string, to: string, mode: TravelMode): Promise<RawTravelData> {
     let raw: ApiResponse;
     if (USE_REAL_API) {
-        raw = makeApiCall(from, to, mode);
+        raw = await makeApiCall(from, to, mode);
     } else {
         raw = sampleResponse;
     }
@@ -95,12 +105,12 @@ function getRawData(from: string, to: string, mode: TravelMode): RawTravelData {
 }
 
 
-function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
+async function makeApiCall(from: string, to: string, mode: TravelMode): Promise<ApiResponse> {
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload = {
         "origin": {"address": from},
         "destination": {"address": to},
-        "travelMode": "TRANSIT",
+        "travelMode": mode,
         "routingPreference": "TRAFFIC_AWARE",
         "departureTime": new Date().toISOString(),
         "languageCode": "de-CH",
@@ -118,8 +128,7 @@ function makeApiCall(from: string, to: string, mode: TravelMode): ApiResponse {
     });
     if(!response.ok) throw new Error(response.statusText);
     const data = await response.json();
-    const result = new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
-    return result;  // problem: this line is reached before the response arrives
+    return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
 }
 
 
