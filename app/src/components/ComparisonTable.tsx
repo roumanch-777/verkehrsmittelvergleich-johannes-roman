@@ -1,50 +1,52 @@
-import { getTravelData } from "../api/google-maps-routes-api";
-import { TravelMode } from "../models/travel-mode";
+import { AllTravelData } from "../api/google-maps-routes-api";
 
 
-const ComparisonTable = () => {
-    const car_data = getTravelData("Bern", "Zürich", TravelMode.DRIVE);
-    const public_transport_data = getTravelData("Bern", "Zürich", TravelMode.TRANSIT);
-    const bike_data = getTravelData("Bern", "Zürich", TravelMode.BICYCLE);
-    const walk_data = getTravelData("Bern", "Zürich", TravelMode.WALK);
-    const two_wheeler_data = getTravelData("Bern", "Zürich", TravelMode.TWO_WHEELER);
+interface ComparisonTableProps {
+    all_travel_data: AllTravelData | null;
+}
 
-    return <table>
-        <thead>
-            <tr>
-                <th>Verkehrsmittel</th>
-                <th>Distanz</th>
-                <th>Zeit</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Auto</td>
-                <td>{car_data.formattedDistance}</td>
-                <td>{car_data.formattedTime}</td>
-            </tr>
-            <tr>
-                <td>Öffentliche Verkehrsmittel</td>
-                <td>{public_transport_data.formattedDistance}</td>
-                <td>{public_transport_data.formattedTime}</td>
-            </tr>
-            <tr>
-                <td>Velo</td>
-                <td>{bike_data.formattedDistance}</td>
-                <td>{bike_data.formattedTime}</td>
-            </tr>
-            <tr>
-                <td>Fussgänger</td>
-                <td>{walk_data.formattedDistance}</td>
-                <td>{walk_data.formattedTime}</td>
-            </tr>
-            <tr>
-                <td>Motorrad</td>
-                <td>{two_wheeler_data.formattedDistance}</td>
-                <td>{two_wheeler_data.formattedTime}</td>
-            </tr>
-        </tbody>
-    </table>;
+const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
+    if (!all_travel_data) {
+        return null;
+    }
+    return (
+        <table>
+            <thead>
+                <tr>
+                    <th>Verkehrsmittel</th>
+                    <th>Distanz</th>
+                    <th>Zeit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Auto</td>
+                    <td>{all_travel_data.drive.formattedDistance}</td>
+                    <td>{all_travel_data.drive.formattedTime}</td>
+                </tr>
+                <tr>
+                    <td>Öffentliche Verkehrsmittel</td>
+                    <td>{all_travel_data.transit.formattedDistance}</td>
+                    <td>{all_travel_data.transit.formattedTime}</td>
+                </tr>
+                <tr>
+                    <td>Velo</td>
+                    <td>{all_travel_data.bicycle.formattedDistance}</td>
+                    <td>{all_travel_data.bicycle.formattedTime}</td>
+                </tr>
+                <tr>
+                    <td>Fussgänger</td>
+                    <td>{all_travel_data.walk.formattedDistance}</td>
+                    <td>{all_travel_data.walk.formattedTime}</td>
+                </tr>
+                <tr>
+                    <td>Motorrad</td>
+                    <td>{all_travel_data.two_wheeler.formattedDistance}</td>
+                    <td>{all_travel_data.two_wheeler.formattedTime}</td>
+                </tr>
+            </tbody>
+        </table>
+    );
 };
 
 export default ComparisonTable;

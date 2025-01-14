@@ -8,6 +8,7 @@ import {formValidationHandler} from "./utils/formValidationHandler";
 import ErrorDisplay from "./components/ErrorDisplay";
 import EventBus from "./utils/EventBus";
 import Messages from "./events/messages";
+import { AllTravelData, getAllTravelData } from './api/google-maps-routes-api';
 
 function App() {
 
@@ -39,6 +40,8 @@ function App() {
         };
     }, []);
 
+    const [allTravelData, setAllTravelData] = useState<AllTravelData | null>(null);
+
     const handleSubmit = () => {
         const isValid = validateForm(from, to, departureTime, arrivalTime);
 
@@ -48,7 +51,8 @@ function App() {
 
         const requestData = {from, to, departureTime, arrivalTime};
         console.log("Formulardaten erfolgreich veröffentlicht:", requestData);
-        // ab hier BackEnd-Abfrage
+        getAllTravelData(from, to, departureTime, arrivalTime, setAllTravelData);
+
     };
 
     return (
@@ -60,7 +64,7 @@ function App() {
             <InputField label="Bis" value={to} onChange={setTo}/>
             <DatumPicker label="Ankunft" value={arrivalTime} onChange={setArrivalTime}/>
             <Button onClick={handleSubmit}>Absenden</Button>
-            <ComparisonTable/>
+            <ComparisonTable all_travel_data={allTravelData}/>
         </div>
     );
 }
