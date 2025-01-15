@@ -1,7 +1,7 @@
 import {TravelMode} from "../models/travel-mode";
 
 
-const USE_REAL_API = true;
+const USE_REAL_API = false;
 const API_KEY = ensure_string(process.env.REACT_APP_API_KEY);
 
 
