@@ -1,4 +1,4 @@
-import { TravelMode } from "../models/travel-mode";
+import {TravelMode} from "../models/travel-mode";
 
 
 const USE_REAL_API = false;
@@ -52,7 +52,7 @@ export class AllTravelData {
         this.drive = drive;
         this.bicycle = bicycle;
         this.walk = walk;
-        this.two_wheeler= two_wheeler;
+        this.two_wheeler = two_wheeler;
         this.transit = transit;
     }
 
@@ -73,7 +73,7 @@ class ApiResponse {
 const sampleResponse = new ApiResponse(121556, "5535s")
 
 
-export async function getAllTravelData(from: string, to: string, departureTime: Date, arrivalTime: Date, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
+export async function getAllTravelData(from: string, to: string, departureTime: Date, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
     const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
     const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
     const walk = await getTravelData(from, to, departureTime, TravelMode.WALK);
@@ -124,9 +124,10 @@ async function makeApiCall(from: string, to: string, departureTime: Date, mode: 
         headers: headers,
         body: JSON.stringify(payload)
     });
-    if(!response.ok) {
+    if (!response.ok) {
         throw new Error();
-    };
+    }
+    ;
     const data = await response.json();
     return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
 }
@@ -136,8 +137,7 @@ function computeDistanceString(meters_total: number): string {
     let formattedDistance: string;
     if (meters_total < 1000) {
         formattedDistance = `${meters_total} Meter`;
-    }
-    else {
+    } else {
         const kilometers = Math.floor(meters_total / 1000);
         const meters = meters_total % 1000;
         formattedDistance = `${kilometers} Kilometer ${meters} Meter`;
@@ -150,13 +150,11 @@ function computeTimeString(seconds_total: number): string {
     let formattedTime: string;
     if (seconds_total < 60) {
         formattedTime = `${seconds_total} Sekunden`;
-    }
-    else if (seconds_total < 3600) {
+    } else if (seconds_total < 3600) {
         const minutes = Math.floor(seconds_total / 60);
         const seconds = seconds_total % 60;
         formattedTime = `${minutes} Minuten ${seconds} Sekunden`;
-    }
-    else {
+    } else {
         const hours = Math.floor(seconds_total / 3600);
         const minutes = Math.floor((seconds_total / 60) - (hours * 60));
         const seconds = seconds_total % 60;

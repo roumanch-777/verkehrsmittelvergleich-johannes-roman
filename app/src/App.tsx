@@ -8,14 +8,13 @@ import {formValidationHandler} from "./utils/formValidationHandler";
 import ErrorDisplay from "./components/ErrorDisplay";
 import EventBus from "./utils/EventBus";
 import Messages from "./events/messages";
-import { AllTravelData, getAllTravelData } from './api/google-maps-routes-api';
+import {AllTravelData, getAllTravelData} from './api/google-maps-routes-api';
 
 function App() {
 
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
     const [departureTime, setDepartureTime] = useState<Date | null>(new Date());
-    const [arrivalTime, setArrivalTime] = useState<Date | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const {validateForm} = formValidationHandler();
@@ -43,15 +42,15 @@ function App() {
     const [allTravelData, setAllTravelData] = useState<AllTravelData | null>(null);
 
     const handleSubmit = () => {
-        const isValid = validateForm(from, to, departureTime, arrivalTime);
+        const isValid = validateForm(from, to, departureTime);
 
         if (!isValid) {
             return;
         }
 
-        const requestData = {from, to, departureTime, arrivalTime};
+        const requestData = {from, to, departureTime};
         console.log("Formulardaten erfolgreich veröffentlicht:", requestData);
-        getAllTravelData(from, to, departureTime, arrivalTime, setAllTravelData);
+        getAllTravelData(from, to, departureTime, setAllTravelData);
 
     };
 
@@ -62,7 +61,6 @@ function App() {
             <InputField label="Von" value={from} onChange={setFrom}/>
             <DatumPicker label="Abfahrt" value={departureTime} onChange={setDepartureTime}/>
             <InputField label="Bis" value={to} onChange={setTo}/>
-            <DatumPicker label="Ankunft" value={arrivalTime} onChange={setArrivalTime}/>
             <Button onClick={handleSubmit}>Absenden</Button>
             <ComparisonTable all_travel_data={allTravelData}/>
         </div>
