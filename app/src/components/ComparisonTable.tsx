@@ -1,14 +1,26 @@
 import { AllTravelData } from "../api/google-maps-routes-api";
 
 
+const means_to_title: Record<string, string> = {
+    drive: "Auto",
+    bicycle: "Fahrrad",
+    walk: "Zu Fuss",
+    two_wheeler: "Motorrad",
+    transit: "Öffentliche Verkehrsmittel",
+}
+
+
 interface ComparisonTableProps {
     all_travel_data: AllTravelData | null;
 }
+
 
 const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
     if (!all_travel_data) {
         return null;
     }
+    const all_means = Object.keys(all_travel_data);
+    const all_values = Object.values(all_travel_data);
     return (
         <table>
             <thead>
@@ -19,31 +31,16 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Auto</td>
-                    <td>{all_travel_data.drive.formattedDistance}</td>
-                    <td>{all_travel_data.drive.formattedTime}</td>
-                </tr>
-                <tr>
-                    <td>Öffentliche Verkehrsmittel</td>
-                    <td>{all_travel_data.transit.formattedDistance}</td>
-                    <td>{all_travel_data.transit.formattedTime}</td>
-                </tr>
-                <tr>
-                    <td>Velo</td>
-                    <td>{all_travel_data.bicycle.formattedDistance}</td>
-                    <td>{all_travel_data.bicycle.formattedTime}</td>
-                </tr>
-                <tr>
-                    <td>Fussgänger</td>
-                    <td>{all_travel_data.walk.formattedDistance}</td>
-                    <td>{all_travel_data.walk.formattedTime}</td>
-                </tr>
-                <tr>
-                    <td>Motorrad</td>
-                    <td>{all_travel_data.two_wheeler.formattedDistance}</td>
-                    <td>{all_travel_data.two_wheeler.formattedTime}</td>
-                </tr>
+                {all_means.map((means, index) => {
+                    if(all_values[index] === undefined) {
+                        return null
+                    } else {
+                        return <tr key={means}>
+                            <td>{means_to_title[means]}</td>
+                            <td>{all_values[index].formattedDistance}</td>
+                            <td>{all_values[index].formattedTime}</td>
+                        </tr>
+                }})}
             </tbody>
         </table>
     );

@@ -1,7 +1,7 @@
 import {TravelMode} from "../models/travel-mode";
 
 
-const USE_REAL_API = false;
+const USE_REAL_API = true;
 const API_KEY = ensure_string(process.env.REACT_APP_API_KEY);
 
 
@@ -36,18 +36,18 @@ class FormattedTravelData {
 
 
 export class AllTravelData {
-    drive: FormattedTravelData
-    bicycle: FormattedTravelData
-    walk: FormattedTravelData
-    two_wheeler: FormattedTravelData
-    transit: FormattedTravelData
+    drive: FormattedTravelData | undefined
+    bicycle: FormattedTravelData | undefined
+    walk: FormattedTravelData | undefined
+    two_wheeler: FormattedTravelData | undefined
+    transit: FormattedTravelData | undefined
 
     constructor(
-        drive: FormattedTravelData,
-        bicycle: FormattedTravelData,
-        walk: FormattedTravelData,
-        two_wheeler: FormattedTravelData,
-        transit: FormattedTravelData,
+        drive: FormattedTravelData | undefined,
+        bicycle: FormattedTravelData | undefined,
+        walk: FormattedTravelData | undefined,
+        two_wheeler: FormattedTravelData | undefined,
+        transit: FormattedTravelData | undefined,
     ) {
         this.drive = drive;
         this.bicycle = bicycle;
@@ -93,18 +93,24 @@ export async function getAllTravelData(from: string, to: string, departureTime: 
 }
 
 
-async function getTravelData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<FormattedTravelData> {
+async function getTravelData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<FormattedTravelData | undefined> {
     const rawTravelData = await getRawData(from, to, departureTime, mode);
+    if(!rawTravelData) {
+        return;
+    }
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
     return new FormattedTravelData(formattedTime, distanceString);
 }
 
 
-async function getRawData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<RawTravelData> {
-    let raw: ApiResponse;
+async function getRawData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<RawTravelData | undefined> {
+    let raw: ApiResponse | undefined;
     if (USE_REAL_API) {
         raw = await makeApiCall(from, to, departureTime, mode);
+        if(!raw) {
+            return;
+        }
     } else {
         raw = sampleResponse;
     }
@@ -114,7 +120,7 @@ async function getRawData(from: string, to: string, departureTime: Date | null, 
 }
 
 
-async function makeApiCall(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<ApiResponse> {
+async function makeApiCall(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<ApiResponse | undefined> {
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload: Payload = {
         "origin": {"address": from},
@@ -125,7 +131,7 @@ async function makeApiCall(from: string, to: string, departureTime: Date | null,
     if(departureTime && departureTime > new Date()) {
         payload["departureTime"] = departureTime.toISOString();
     };
-    if(mode !== TravelMode.WALK && mode !== TravelMode.BICYCLE) {
+    if(mode !== TravelMode.WALK && mode !== TravelMode.BICYCLE && mode !== TravelMode.TRANSIT) {
         payload["routingPreference"] = "TRAFFIC_AWARE";
     };
     const headers = {
@@ -140,18 +146,24 @@ async function makeApiCall(from: string, to: string, departureTime: Date | null,
     });
     if(!response.ok) throw new Error();
     const data = await response.json();
-    return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
+    if(data && "routes" in data && data["routes"].length > 0) {
+        console.log(`Received a route for mode ${mode.valueOf()} (from '${from}' to '${to}')`);
+        return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
+    } else {
+        console.log(`No route found for mode ${mode.valueOf()} (from '${from}' to '${to}')`);
+        return;
+    }
 }
 
 
 function computeDistanceString(meters_total: number): string {
     let formattedDistance: string;
     if (meters_total < 1000) {
-        formattedDistance = `${meters_total} Meter`;
+        formattedDistance = `${meters_total} m`;
     } else {
         const kilometers = Math.floor(meters_total / 1000);
         const meters = meters_total % 1000;
-        formattedDistance = `${kilometers} Kilometer ${meters} Meter`;
+        formattedDistance = `${kilometers} km ${meters} m`;
     }
     return formattedDistance
 }
@@ -160,16 +172,15 @@ function computeDistanceString(meters_total: number): string {
 function computeTimeString(seconds_total: number): string {
     let formattedTime: string;
     if (seconds_total < 60) {
-        formattedTime = `${seconds_total} Sekunden`;
+        formattedTime = `${seconds_total} s`;
     } else if (seconds_total < 3600) {
         const minutes = Math.floor(seconds_total / 60);
         const seconds = seconds_total % 60;
-        formattedTime = `${minutes} Minuten ${seconds} Sekunden`;
+        formattedTime = `${minutes} min ${seconds} s`;
     } else {
         const hours = Math.floor(seconds_total / 3600);
         const minutes = Math.floor((seconds_total / 60) - (hours * 60));
-        const seconds = seconds_total % 60;
-        formattedTime = `${hours} Stunden ${minutes} Minuten ${seconds} Sekunden`;
+        formattedTime = `${hours} h ${minutes} min`;
     }
     return formattedTime
 }
