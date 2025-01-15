@@ -1,4 +1,4 @@
-import { TravelMode } from "../models/travel-mode";
+import {TravelMode} from "../models/travel-mode";
 
 
 const USE_REAL_API = false;
@@ -52,7 +52,7 @@ export class AllTravelData {
         this.drive = drive;
         this.bicycle = bicycle;
         this.walk = walk;
-        this.two_wheeler= two_wheeler;
+        this.two_wheeler = two_wheeler;
         this.transit = transit;
     }
 
@@ -83,7 +83,7 @@ class ApiResponse {
 const sampleResponse = new ApiResponse(121556, "5535s")
 
 
-export async function getAllTravelData(from: string, to: string, departureTime: Date, arrivalTime: Date, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
+export async function getAllTravelData(from: string, to: string, departureTime: Date | null, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
     const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
     const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
     const walk = await getTravelData(from, to, departureTime, TravelMode.WALK);
@@ -93,7 +93,7 @@ export async function getAllTravelData(from: string, to: string, departureTime: 
 }
 
 
-async function getTravelData(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<FormattedTravelData> {
+async function getTravelData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<FormattedTravelData> {
     const rawTravelData = await getRawData(from, to, departureTime, mode);
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const distanceString = computeDistanceString(rawTravelData.distanceMeters);
@@ -101,7 +101,7 @@ async function getTravelData(from: string, to: string, departureTime: Date, mode
 }
 
 
-async function getRawData(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<RawTravelData> {
+async function getRawData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<RawTravelData> {
     let raw: ApiResponse;
     if (USE_REAL_API) {
         raw = await makeApiCall(from, to, departureTime, mode);
@@ -114,7 +114,7 @@ async function getRawData(from: string, to: string, departureTime: Date, mode: T
 }
 
 
-async function makeApiCall(from: string, to: string, departureTime: Date, mode: TravelMode): Promise<ApiResponse> {
+async function makeApiCall(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<ApiResponse> {
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload: Payload = {
         "origin": {"address": from},
@@ -122,7 +122,7 @@ async function makeApiCall(from: string, to: string, departureTime: Date, mode: 
         "travelMode": mode,
         "languageCode": "de-CH",
     };
-    if(departureTime > new Date()) {
+    if(departureTime && departureTime > new Date()) {
         payload["departureTime"] = departureTime.toISOString();
     };
     if(mode !== TravelMode.WALK && mode !== TravelMode.BICYCLE) {
@@ -148,8 +148,7 @@ function computeDistanceString(meters_total: number): string {
     let formattedDistance: string;
     if (meters_total < 1000) {
         formattedDistance = `${meters_total} Meter`;
-    }
-    else {
+    } else {
         const kilometers = Math.floor(meters_total / 1000);
         const meters = meters_total % 1000;
         formattedDistance = `${kilometers} Kilometer ${meters} Meter`;
@@ -162,13 +161,11 @@ function computeTimeString(seconds_total: number): string {
     let formattedTime: string;
     if (seconds_total < 60) {
         formattedTime = `${seconds_total} Sekunden`;
-    }
-    else if (seconds_total < 3600) {
+    } else if (seconds_total < 3600) {
         const minutes = Math.floor(seconds_total / 60);
         const seconds = seconds_total % 60;
         formattedTime = `${minutes} Minuten ${seconds} Sekunden`;
-    }
-    else {
+    } else {
         const hours = Math.floor(seconds_total / 3600);
         const minutes = Math.floor((seconds_total / 60) - (hours * 60));
         const seconds = seconds_total % 60;

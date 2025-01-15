@@ -5,16 +5,15 @@ export const formValidationHandler = () => {
     const validateForm = (
         from: string,
         to: string,
-        departureTime: Date | null,
-        arrivalTime: Date | null
+        departureTime: Date | null
     ): boolean => {
         if (!from || !to) {
             EventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrts- und Zielort ausfüllen!");
             return false;
         }
 
-        if (!departureTime && !arrivalTime) {
-            EventBus.publish(Messages.FORM_ERROR, "Bitte mindestens eine Abfahrts- oder Ankunftszeit angeben!");
+        if (!departureTime) {
+            EventBus.publish(Messages.FORM_ERROR, "Bitte Ankunftszeit angeben!");
             return false;
         }
 
