@@ -1,4 +1,5 @@
 import {TravelMode} from "../models/travel-mode";
+import {DiagramData} from "../components/Diagram";
 
 
 const USE_REAL_API = false;
@@ -24,7 +25,7 @@ class RawTravelData {
 }
 
 
-class FormattedTravelData {
+export class FormattedTravelData {
     formattedTime: string;
     formattedDistance: string;
 
@@ -83,14 +84,20 @@ class ApiResponse {
 const sampleResponse = new ApiResponse(121556, "5535s")
 
 
-export async function getAllTravelData(from: string, to: string, departureTime: Date | null, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
+export async function getAllTravelData(
+    from: string, 
+    to: string, 
+    departureTime: Date | null, 
+    setAllTravelData: (data: AllTravelData) => void,
+    setDiagramData: (data: any) => void,
+): Promise<void> {
     const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
     const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
     const walk = await getTravelData(from, to, departureTime, TravelMode.WALK);
     const two_wheeler = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const transit = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     setAllTravelData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
-    //setDiagramData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
+    setDiagramData(new DiagramData(drive, bicycle, walk, two_wheeler, transit));
 }
 
 

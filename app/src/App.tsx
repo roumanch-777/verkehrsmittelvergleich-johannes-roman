@@ -10,7 +10,7 @@ import EventBus from "./utils/EventBus";
 import Messages from "./events/messages";
 import {AllTravelData, getAllTravelData} from './api/google-maps-routes-api';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';
-import Diagram from './components/Diagram';
+import Diagram, { DiagramData } from './components/Diagram';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip);
 
@@ -20,17 +20,6 @@ function App() {
     const [to, setTo] = useState("");
     const [departureTime, setDepartureTime] = useState<Date | null>(new Date());
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [diagramData, setdiagramData] = useState({
-        labels: ["Januar", "Februar", "März", "April", "Mai"],
-        datasets: [
-          {
-            label: "Umsatz",
-            data: [3000, 2000, 4000, 5000, 6000],
-            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
-          },
-        ],
-      });
-
 
     const {validateForm} = formValidationHandler();
 
@@ -55,6 +44,7 @@ function App() {
     }, []);
 
     const [allTravelData, setAllTravelData] = useState<AllTravelData | null>(null);
+    const [diagramData, setDiagramData] = useState<DiagramData | null>(null);
 
     const handleSubmit = () => {
         const isValid = validateForm(from, to, departureTime);
@@ -65,7 +55,7 @@ function App() {
 
         const requestData = {from, to, departureTime};
         console.log("Formulardaten erfolgreich veröffentlicht:", requestData);
-        getAllTravelData(from, to, departureTime, setAllTravelData);
+        getAllTravelData(from, to, departureTime, setAllTravelData, setDiagramData);
 
     };
 
