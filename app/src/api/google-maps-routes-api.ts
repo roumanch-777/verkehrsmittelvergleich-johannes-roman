@@ -90,6 +90,7 @@ export async function getAllTravelData(from: string, to: string, departureTime: 
     const two_wheeler = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const transit = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     setAllTravelData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
+    //setDiagramData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
 }
 
 

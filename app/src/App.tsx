@@ -9,6 +9,10 @@ import ErrorDisplay from "./components/ErrorDisplay";
 import EventBus from "./utils/EventBus";
 import Messages from "./events/messages";
 import {AllTravelData, getAllTravelData} from './api/google-maps-routes-api';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';
+import Diagram from './components/Diagram';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip);
 
 function App() {
 
@@ -16,6 +20,17 @@ function App() {
     const [to, setTo] = useState("");
     const [departureTime, setDepartureTime] = useState<Date | null>(new Date());
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [diagramData, setdiagramData] = useState({
+        labels: ["Januar", "Februar", "März", "April", "Mai"],
+        datasets: [
+          {
+            label: "Umsatz",
+            data: [3000, 2000, 4000, 5000, 6000],
+            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+          },
+        ],
+      });
+
 
     const {validateForm} = formValidationHandler();
 
@@ -63,6 +78,7 @@ function App() {
             <InputField label="Bis" value={to} onChange={setTo}/>
             <Button onClick={handleSubmit}>Absenden</Button>
             <ComparisonTable all_travel_data={allTravelData}/>
+            <Diagram diagramData={diagramData} />
         </div>
     );
 }
