@@ -1,5 +1,4 @@
 import {TravelMode} from "../models/travel-mode";
-import {DiagramData} from "../components/Diagram";
 
 
 const USE_REAL_API = false;
@@ -89,7 +88,7 @@ export async function getAllTravelData(
     to: string, 
     departureTime: Date | null, 
     setAllTravelData: (data: AllTravelData) => void,
-    setDiagramData: (data: DiagramData) => void,
+    setDiagramData: (data: AllTravelData) => void,
 ): Promise<void> {
     const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
     const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);

@@ -10,7 +10,7 @@ import EventBus from "./utils/EventBus";
 import Messages from "./events/messages";
 import {AllTravelData, getAllTravelData} from './api/google-maps-routes-api';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';
-import Diagram, { DiagramData } from './components/Diagram';
+import Diagram from './components/Diagram';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip);
 
@@ -44,7 +44,7 @@ function App() {
     }, []);
 
     const [allTravelData, setAllTravelData] = useState<AllTravelData | null>(null);
-    const [diagramData, setDiagramData] = useState<DiagramData | null>(null);
+    const [diagramData, setDiagramData] = useState<AllTravelData | null>(null);
 
     const handleSubmit = () => {
         const isValid = validateForm(from, to, departureTime);

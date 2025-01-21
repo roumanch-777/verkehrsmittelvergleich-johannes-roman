@@ -1,17 +1,12 @@
 import { Bar } from 'react-chartjs-2';
-import { FormattedTravelData } from '../api/google-maps-routes-api';
+import { AllTravelData } from '../api/google-maps-routes-api';
 
-export interface DiagramData {
-    drive: FormattedTravelData | undefined
-    bicycle: FormattedTravelData | undefined
-    walk: FormattedTravelData | undefined
-    two_wheeler: FormattedTravelData | undefined
-    transit: FormattedTravelData | undefined
-}
+
+interface DiagramData {}
 
 
 interface DiagramDataProps {
-    diagramData: DiagramData | null;
+    diagramData: AllTravelData | null;
 }
 
 
@@ -19,6 +14,16 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData }) => {
     if(!diagramData) {
         return null;
     }
+    // {
+    //     labels: ["Januar", "Februar", "März", "April", "Mai"],
+    //     datasets: [
+    //       {
+    //         label: "Umsatz",
+    //         data: [3000, 2000, 4000, 5000, 6000],
+    //         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+    //       },
+    //     ],
+    //   }
     return (
         <div className="chart-container">
             <h2 style={{ textAlign: "center" }}>Balkendiagramm</h2>
