@@ -89,7 +89,7 @@ export async function getAllTravelData(
     to: string, 
     departureTime: Date | null, 
     setAllTravelData: (data: AllTravelData) => void,
-    setDiagramData: (data: any) => void,
+    setDiagramData: (data: DiagramData) => void,
 ): Promise<void> {
     const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
     const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
@@ -97,7 +97,7 @@ export async function getAllTravelData(
     const two_wheeler = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const transit = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     setAllTravelData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
-    setDiagramData(new DiagramData(drive, bicycle, walk, two_wheeler, transit));
+    setDiagramData({drive, bicycle, walk, two_wheeler, transit});
 }
 
 
