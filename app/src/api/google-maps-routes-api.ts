@@ -13,49 +13,24 @@ function ensure_string(str: string | undefined | void): string {
 }
 
 
-class RawTravelData {
-    durationSeconds: number;
-    distanceMeters: number;
-
-    constructor(distanceMeters: number, durationSeconds: number) {
-        this.distanceMeters = distanceMeters;
-        this.durationSeconds = durationSeconds;
-    }
+interface RawTravelData {
+    durationSeconds: number
+    distanceMeters: number
 }
 
 
-class FormattedTravelData {
-    formattedTime: string;
-    formattedDistance: string;
-
-    constructor(formattedTime: string, formattedDistance: string) {
-        this.formattedTime = formattedTime;
-        this.formattedDistance = formattedDistance;
-    }
+interface FormattedTravelData {
+    formattedTime: string
+    formattedDistance: string
 }
 
 
-export class AllTravelData {
+export interface AllTravelData {
     drive: FormattedTravelData | undefined
     bicycle: FormattedTravelData | undefined
     walk: FormattedTravelData | undefined
     two_wheeler: FormattedTravelData | undefined
     transit: FormattedTravelData | undefined
-
-    constructor(
-        drive: FormattedTravelData | undefined,
-        bicycle: FormattedTravelData | undefined,
-        walk: FormattedTravelData | undefined,
-        two_wheeler: FormattedTravelData | undefined,
-        transit: FormattedTravelData | undefined,
-    ) {
-        this.drive = drive;
-        this.bicycle = bicycle;
-        this.walk = walk;
-        this.two_wheeler = two_wheeler;
-        this.transit = transit;
-    }
-
 }
 
 
@@ -89,7 +64,7 @@ export async function getAllTravelData(from: string, to: string, departureTime: 
     const walk = await getTravelData(from, to, departureTime, TravelMode.WALK);
     const two_wheeler = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const transit = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
-    setAllTravelData(new AllTravelData(drive, bicycle, walk, two_wheeler, transit));
+    setAllTravelData({drive, bicycle, walk, two_wheeler, transit});
 }
 
 
@@ -99,8 +74,8 @@ async function getTravelData(from: string, to: string, departureTime: Date | nul
         return;
     }
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
-    const distanceString = computeDistanceString(rawTravelData.distanceMeters);
-    return new FormattedTravelData(formattedTime, distanceString);
+    const formattedDistance = computeDistanceString(rawTravelData.distanceMeters);
+    return {formattedTime, formattedDistance};
 }
 
 
@@ -116,7 +91,7 @@ async function getRawData(from: string, to: string, departureTime: Date | null, 
     }
     const distanceMeters = raw.distanceMeters;
     const durationSeconds = parseInt(raw.duration.replace(/s$/, ""));
-    return new RawTravelData(distanceMeters, durationSeconds);
+    return {distanceMeters, durationSeconds};
 }
 
 
