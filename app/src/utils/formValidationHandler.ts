@@ -13,11 +13,10 @@ export const formValidationHandler = () => {
         }
 
         if (!departureTime) {
-            EventBus.publish(Messages.FORM_ERROR, "Bitte Ankunftszeit angeben!");
+            EventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrtszeit angeben!");
             return false;
         }
 
-        EventBus.publish(Messages.FORM_SUBMITTED, "Formular ist korrekt ausgefüllt!");
         return true;
     };
 
