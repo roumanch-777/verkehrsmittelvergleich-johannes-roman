@@ -56,18 +56,14 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
     };
     return (
         <div className="chart-container">
-            <h2 style={{ textAlign: "center" }}>Balkendiagramm</h2>
+            <h2 style={{ textAlign: "center" }}>{label_str}</h2>
             <Bar 
                 data={formattedDiagramData} 
                 options={{
                     plugins: {
-                    title: {
-                        display: true,
-                        text: "Datenübersicht",
-                    },
-                    legend: {
-                        display: false,
-                    },
+                        legend: {
+                            display: false,
+                        },
                     },
                 }} 
             />
