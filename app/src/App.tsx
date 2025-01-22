@@ -10,7 +10,7 @@ import {AllTravelData, getAllTravelData} from './api/google-maps-routes-api';
 import EventBus from "./utils/EventBus";
 import Messages from "./events/messages";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';
-import Diagram from './components/Diagram';
+import Diagram, {LabelType} from './components/Diagram';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip);
 
@@ -48,7 +48,8 @@ function App() {
             <InputField label="Zielort" value={to} onChange={setTo}/>
             <Button onClick={handleSubmit}>Absenden</Button>
             <ComparisonTable all_travel_data={allTravelData}/>
-            <Diagram diagramData={diagramData} />
+            <Diagram diagramData={diagramData} label={LabelType.DURATION}/>
+            <Diagram diagramData={diagramData} label={LabelType.DISTANCE}/>
         </div>
     );
 }
