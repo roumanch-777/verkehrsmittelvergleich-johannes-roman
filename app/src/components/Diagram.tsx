@@ -1,5 +1,5 @@
 import { Bar } from 'react-chartjs-2';
-import { AllTravelData } from '../api/google-maps-routes-api';
+import { AllTravelDataUnformatted } from '../api/google-maps-routes-api';
 
 
 export enum LabelType {
@@ -18,7 +18,7 @@ interface DiagramData {
 
 
 interface DiagramDataProps {
-    diagramData: AllTravelData | null;
+    diagramData: AllTravelDataUnformatted | null;
     label: LabelType;
 }
 
@@ -30,19 +30,19 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
     const label_str = label === LabelType.DURATION ? "Dauer" : "Distanz";
     const data = label === LabelType.DURATION ? 
         [
-            diagramData.drive?.formattedTime ? parseInt(diagramData.drive.formattedTime) : 0,
-            diagramData.bicycle?.formattedTime ? parseInt(diagramData.bicycle.formattedTime) : 0,
-            diagramData.walk?.formattedTime ? parseInt(diagramData.walk.formattedTime) : 0,
-            diagramData.two_wheeler?.formattedTime ? parseInt(diagramData.two_wheeler.formattedTime) : 0,
-            diagramData.transit?.formattedTime ? parseInt(diagramData.transit.formattedTime) : 0,
+            diagramData.drive_raw?.durationSeconds || 0,
+            diagramData.bicycle_raw?.durationSeconds || 0,
+            diagramData.walk_raw?.durationSeconds || 0,
+            diagramData.two_wheeler_raw?.durationSeconds || 0,
+            diagramData.transit_raw?.durationSeconds || 0,
         ]
     :
         [
-            diagramData.drive?.formattedDistance ? parseInt(diagramData.drive.formattedDistance) : 0,
-            diagramData.bicycle?.formattedDistance ? parseInt(diagramData.bicycle.formattedDistance) : 0,
-            diagramData.walk?.formattedDistance ? parseInt(diagramData.walk.formattedDistance) : 0,
-            diagramData.two_wheeler?.formattedDistance ? parseInt(diagramData.two_wheeler.formattedDistance) : 0,
-            diagramData.transit?.formattedDistance ? parseInt(diagramData.transit.formattedDistance) : 0,
+            diagramData.drive_raw?.distanceMeters || 0,
+            diagramData.bicycle_raw?.distanceMeters || 0,
+            diagramData.walk_raw?.distanceMeters || 0,
+            diagramData.two_wheeler_raw?.distanceMeters || 0,
+            diagramData.transit_raw?.distanceMeters || 0,
         ];
     const formattedDiagramData: DiagramData = {
         labels: ["Auto", "Fahrrad", "Zu Fuß", "Motorrad", "Öffentliche Verkehrsmittel"],
