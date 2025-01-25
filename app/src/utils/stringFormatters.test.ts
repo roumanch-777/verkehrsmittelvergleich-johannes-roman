@@ -1,8 +1,4 @@
-import { computeTimeString } from './stringFormatters';
-
-const MINUTE = 60;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
+import { computeTimeString, MINUTE, HOUR, DAY } from './stringFormatters';
 
 describe("computeTimeString", () => {
     test("0s", () => {
@@ -54,12 +50,16 @@ describe("computeTimeString", () => {
         expect(result).toBe("21h 2min");
     });
     // test("23h 59min 40s -> 1d 0h", () => {
-    //     const result = computeTimeString((23 * HOURS) + (59 * MINUTES) + 40);
+    //     const result = computeTimeString((23 * HOUR) + (59 * MINUTE) + 40);
     //     expect(result).toBe("1d 0h");
     // });
     test("1d 0h 12min 40s -> 1d 0h", () => {
         const result = computeTimeString((1 * DAY) + (0 * HOUR) + (12 * MINUTE) + 40);
-        expect(result).toBe("1 d 0h");
+        expect(result).toBe("1d 0h");
+    });
+    test("1d 12h 35min 1s -> 1d 13h", () => {
+        const result = computeTimeString((1 * DAY) + (12 * HOUR) + (35 * MINUTE) + 1);
+        expect(result).toBe("1d 13h");
     });
 });
 
