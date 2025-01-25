@@ -21,22 +21,25 @@ export function computeDistanceString(meters_total: number): string {
 
 
 export function computeTimeString(seconds_total: number): string {
-    let formattedTime: string;
-    if (seconds_total < 60) {
-        formattedTime = `${seconds_total} s`;
-    } else if (seconds_total < 3600) {
-        let minutes = Math.floor(seconds_total / 60);
-        const seconds = seconds_total % 60;
-        if(seconds > 30) {minutes += 1};
-        formattedTime = `${minutes} min`;
-    } else {
+    if (seconds_total < 60) {  // < 1 min
+        return `${seconds_total} s`;
+    }
+    
+    if (seconds_total < (60 * 60 - 30)) {  // < 59 min 30 s
+        let minutes = Math.round(seconds_total / 60);
+        return `${minutes} min`;
+    }
+
+    if (seconds_total < (24 * 60 * 60)) {  // < 1 d
         const hours = Math.floor(seconds_total / 3600);
-        const minutes = Math.floor((seconds_total / 60) - (hours * 60));
-        if(minutes !== 0) {
-            formattedTime = `${hours} h ${minutes} min`
+        const minutes = Math.round((seconds_total % 3600) / 60);
+        if(minutes < 60) {
+            return `${hours} h ${minutes} min`
         } else {
-            formattedTime = `${hours} h`
+            return `${hours + 1} h 0 min`
         }
     }
-    return formattedTime
+
+    // todo: implement days
+    return "todo: implement days"
 }
