@@ -15,7 +15,7 @@ interface ComparisonTableProps {
 }
 
 
-const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData: allTravelData }) => {
+const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData }) => {
     if (!allTravelData) {
         return null;
     }
