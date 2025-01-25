@@ -34,7 +34,7 @@ function App() {
 
         const requestData = {from, to, departureTime};
         console.log("Formulardaten erfolgreich veröffentlicht:", requestData);
-        EventBus.publish(Messages.FORM_SUBMITTED, "Formular erfolgreich gesendet!");
+        EventBus.publish(Messages.FORM_SUBMITTED, "Einen Moment bitte, wir gehen bei Google nachfragen...");
         getAllTravelData(from, to, departureTime, setAllTravelData, setDiagramData);
 
     };
