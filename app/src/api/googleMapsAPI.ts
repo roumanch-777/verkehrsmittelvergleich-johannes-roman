@@ -81,7 +81,13 @@ export async function getAllTravelData(
     const [twoWheeler, twoWheelerRaw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const [transit, transitRaw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     setAllTravelData({ drive, bicycle, walk, twoWheeler: twoWheeler, transit });
-    setDiagramData({ driveRaw: driveRaw, bicycleRaw: bicycleRaw, walkRaw: walkRaw, twoWheelerRaw: twoWheelerRaw, transitRaw: transitRaw });
+    setDiagramData({
+        driveRaw: driveRaw,
+        bicycleRaw: bicycleRaw,
+        walkRaw: walkRaw,
+        twoWheelerRaw: twoWheelerRaw,
+        transitRaw: transitRaw
+    });
 }
 
 
@@ -101,7 +107,12 @@ async function getTravelData(
 }
 
 
-async function getRawData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<RawTravelData | undefined> {
+async function getRawData(
+    from: string, 
+    to: string, 
+    departureTime: Date | null, 
+    mode: TravelMode
+): Promise<RawTravelData | undefined> {
     let raw: ApiResponse | undefined;
     if (USE_REAL_API) {
         raw = await makeApiCall(from, to, departureTime, mode);
@@ -117,7 +128,12 @@ async function getRawData(from: string, to: string, departureTime: Date | null, 
 }
 
 
-async function makeApiCall(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<ApiResponse | undefined> {
+async function makeApiCall(
+    from: string, 
+    to: string, 
+    departureTime: Date | null, 
+    mode: TravelMode
+): Promise<ApiResponse | undefined> {
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload: Payload = {
         "origin": { "address": from },
