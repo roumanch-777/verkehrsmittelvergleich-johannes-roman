@@ -1,5 +1,6 @@
 import { Bar } from 'react-chartjs-2';
 import { AllTravelDataUnformatted } from '../api/google-maps-routes-api';
+import {computeTimeString, computeDistanceString} from "../utils/stringFormatters";
 
 
 const duration_axis_converter = (value: number | string) => {
@@ -123,26 +124,36 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
             },
         ],
     };
+    const options={
+        plugins: {
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                callbacks: {
+                    // Customize the label of the tooltip (Y-axis value)
+                    label: (tooltipItem: any) => {
+                        const value = tooltipItem.parsed.y;
+                        return `${label === LabelType.DURATION ? computeTimeString(value) : computeDistanceString(value)}`;
+                    },
+                },
+            }
+        },
+        scales: {
+            y: {
+                ticks: {
+                    callback: label === LabelType.DURATION ? duration_axis_converter : distance_axis_converter,
+                    maxTicksLimit: 6,
+                },
+            },
+        },
+    };
     return (
         <div className="chart-container">
             <h2 style={{ textAlign: "center" }}>{labelStr}</h2>
             <Bar
                 data={formattedDiagramData}
-                options={{
-                    plugins: {
-                        legend: {
-                            display: false,
-                        },
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: label === LabelType.DURATION ? duration_axis_converter : distance_axis_converter,
-                                maxTicksLimit: 6,
-                            },
-                        },
-                    },
-                }}
+                options={options}
             />
         </div>
     );
