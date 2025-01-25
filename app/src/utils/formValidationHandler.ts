@@ -20,5 +20,5 @@ export const formValidationHandler = () => {
         return true;
     };
 
-    return {validateForm};
+    return { validateForm };
 };

@@ -1,26 +1,26 @@
-import { AllTravelData } from "../api/google-maps-routes-api";
+import { AllTravelData } from "../api/googleMapsAPI";
 
 
-const means_to_title: Record<string, string> = {
+const meansToTitle: Record<string, string> = {
     drive: "Auto",
     bicycle: "Fahrrad",
     walk: "Zu Fuss",
-    two_wheeler: "Motorrad",
+    TwoWheeler: "Motorrad",
     transit: "Öffentliche Verkehrsmittel",
 }
 
 
 interface ComparisonTableProps {
-    all_travel_data: AllTravelData | null;
+    allTravelData: AllTravelData | null;
 }
 
 
-const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
-    if (!all_travel_data) {
+const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData }) => {
+    if (!allTravelData) {
         return null;
     }
-    const all_means = Object.keys(all_travel_data);
-    const all_values = Object.values(all_travel_data);
+    const allMeans = Object.keys(allTravelData);
+    const allValues = Object.values(allTravelData);
     return (
         <table>
             <thead>
@@ -31,16 +31,17 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
                 </tr>
             </thead>
             <tbody>
-                {all_means.map((means, index) => {
-                    if(all_values[index] === undefined) {
+                {allMeans.map((means, index) => {
+                    if (allValues[index] === undefined) {
                         return null
                     } else {
                         return <tr key={means}>
-                            <td>{means_to_title[means]}</td>
-                            <td>{all_values[index].formattedDistance}</td>
-                            <td>{all_values[index].formattedTime}</td>
+                            <td>{meansToTitle[means]}</td>
+                            <td>{allValues[index].formattedDistance}</td>
+                            <td>{allValues[index].formattedTime}</td>
                         </tr>
-                }})}
+                    }
+                })}
             </tbody>
         </table>
     );

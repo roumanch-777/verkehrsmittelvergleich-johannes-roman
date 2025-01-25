@@ -1,9 +1,9 @@
 import { Bar } from 'react-chartjs-2';
-import { AllTravelDataUnformatted } from '../api/google-maps-routes-api';
-import {computeTimeString, computeDistanceString} from "../utils/stringFormatters";
+import { AllTravelDataUnformatted } from '../api/googleMapsAPI';
+import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
 
 
-const duration_axis_converter = (value: number | string) => {
+const durationAxisConverter = (value: number | string) => {
     if (typeof value === "string") return value;
     if (value > 86400) { // 1 day
         // round on 0.5 d precision: round the double of the value and divide by 2
@@ -23,7 +23,7 @@ const duration_axis_converter = (value: number | string) => {
 };
 
 
-const distance_axis_converter = (value: number | string) => {
+const distanceAxisConverter = (value: number | string) => {
     if (typeof value === "string") return value;
     if (value > 100_000) { // 100 km
         // round on 50 km precision: round the 50th of the value and multiply by 50
@@ -62,7 +62,7 @@ interface LabeledDiagramDataProps {
     drive?: number
     bicycle?: number
     walk?: number
-    two_wheeler?: number
+    twoWheeler?: number
     transit?: number
 }
 
@@ -71,30 +71,30 @@ const labelMapper: Map<string, string> = new Map([
     ["drive", "Auto"],
     ["bicycle", "Velo"],
     ["walk", "Zu Fuss"],
-    ["two_wheeler", "Motorrad"],
+    ["twoWheeler", "Motorrad"],
     ["transit", "ÖV"],
 ]);
 
 
-const compute_data_and_labels = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
+const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
     let result: LabeledDiagramDataProps = {};
     switch (diagramDataProps.label) {
         case LabelType.DURATION:
             result = {
-                drive: diagramDataProps.diagramData?.drive_raw?.durationSeconds || 0,
-                bicycle: diagramDataProps.diagramData?.bicycle_raw?.durationSeconds || 0,
-                walk: diagramDataProps.diagramData?.walk_raw?.durationSeconds || 0,
-                two_wheeler: diagramDataProps.diagramData?.two_wheeler_raw?.durationSeconds || 0,
-                transit: diagramDataProps.diagramData?.transit_raw?.durationSeconds || 0,
+                drive: diagramDataProps.diagramData?.driveRaw?.durationSeconds || 0,
+                bicycle: diagramDataProps.diagramData?.bicycleRaw?.durationSeconds || 0,
+                walk: diagramDataProps.diagramData?.walkRaw?.durationSeconds || 0,
+                twoWheeler: diagramDataProps.diagramData?.twoWheelerRaw?.durationSeconds || 0,
+                transit: diagramDataProps.diagramData?.transitRaw?.durationSeconds || 0,
             };
             break;
         case LabelType.DISTANCE:
             result = {
-                drive: diagramDataProps.diagramData?.drive_raw?.distanceMeters || 0,
-                bicycle: diagramDataProps.diagramData?.bicycle_raw?.distanceMeters || 0,
-                walk: diagramDataProps.diagramData?.walk_raw?.distanceMeters || 0,
-                two_wheeler: diagramDataProps.diagramData?.two_wheeler_raw?.distanceMeters || 0,
-                transit: diagramDataProps.diagramData?.transit_raw?.distanceMeters || 0,
+                drive: diagramDataProps.diagramData?.driveRaw?.distanceMeters || 0,
+                bicycle: diagramDataProps.diagramData?.bicycleRaw?.distanceMeters || 0,
+                walk: diagramDataProps.diagramData?.walkRaw?.distanceMeters || 0,
+                twoWheeler: diagramDataProps.diagramData?.twoWheelerRaw?.distanceMeters || 0,
+                transit: diagramDataProps.diagramData?.transitRaw?.distanceMeters || 0,
             };
             break;
         default:
@@ -113,7 +113,7 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
         return null;
     }
     const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
-    const labeledData = compute_data_and_labels({ diagramData, label });
+    const labeledData = computeDataAndLabels({ diagramData, label });
     const formattedDiagramData: DiagramData = {
         labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
         datasets: [
@@ -124,7 +124,7 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
             },
         ],
     };
-    const options={
+    const options = {
         plugins: {
             legend: {
                 display: false,
@@ -142,7 +142,7 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
         scales: {
             y: {
                 ticks: {
-                    callback: label === LabelType.DURATION ? duration_axis_converter : distance_axis_converter,
+                    callback: label === LabelType.DURATION ? durationAxisConverter : distanceAxisConverter,
                     maxTicksLimit: 6,
                 },
             },
