@@ -9,7 +9,7 @@ interface Props {
     onChange: (value: Date | null) => void;
 }
 
-function DatumPicker({ label, value, onChange }: Props) {
+export function DatePicker({ label, value, onChange }: Props) {
     return (
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={de}>
@@ -24,4 +24,3 @@ function DatumPicker({ label, value, onChange }: Props) {
     );
 }
 
-export default DatumPicker

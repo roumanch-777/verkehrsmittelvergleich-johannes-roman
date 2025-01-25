@@ -3,7 +3,7 @@ import Title from "./components/Title";
 import ComparisonTable from './components/ComparisonTable';
 import InputField from './components/InputField'
 import Button from './components/Button'
-import DatumPicker from "./components/DatumPicker";
+import { DatePicker } from "./components/DatePicker";
 import { formValidationHandler } from "./utils/formValidationHandler";
 import MessageDisplay from "./components/MessageDisplay";
 import { AllTravelData, AllTravelDataUnformatted, getAllTravelData } from './utils/googleMapsAPI';
@@ -44,7 +44,7 @@ function App() {
             <Title />
             <MessageDisplay />
             <InputField label="Abfahrtsort" value={from} onChange={setFrom} />
-            <DatumPicker label="Abfahrtszeit" value={departureTime} onChange={setDepartureTime} />
+            <DatePicker label="Abfahrtszeit" value={departureTime} onChange={setDepartureTime} />
             <InputField label="Zielort" value={to} onChange={setTo} />
             <Button onClick={handleSubmit}>Absenden</Button>
             <ComparisonTable allTravelData={allTravelData} />
