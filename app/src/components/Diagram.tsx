@@ -1,6 +1,6 @@
 import { Bar } from 'react-chartjs-2';
-import { AllTravelDataUnformatted } from '../utils/googleMapsAPI';
 import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
+import { AllTravelDataUnformatted } from '../models/apiModels';
 
 
 const computeDurationAxis = (value: number | string) => {
@@ -134,7 +134,7 @@ export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, 
     if (!allTravelDataUnformatted) {
         return null;
     }
-    const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
+    const labelStr = label === LabelType.DURATION ? "Zeit" : "Distanz";
     const labeledData = computeLabeledData(allTravelDataUnformatted, label);
     const formattedDiagramData = {
         labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),

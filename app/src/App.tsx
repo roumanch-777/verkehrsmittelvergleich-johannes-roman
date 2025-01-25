@@ -6,7 +6,8 @@ import { Button } from './components/Button'
 import { DatePicker } from "./components/DatePicker";
 import { formValidationHandler } from "./utils/formValidationHandler";
 import { MessageDisplay } from "./components/MessageDisplay";
-import { AllTravelData, AllTravelDataUnformatted, getAllTravelData } from './utils/googleMapsAPI';
+import { AllTravelData, AllTravelDataUnformatted } from './models/apiModels';
+import { getAllTravelData } from './utils/googleMapsAPI';
 import { eventBus } from "./utils/EventBus";
 import { Messages } from "./models/messages";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';

@@ -1,4 +1,12 @@
-import { TravelMode } from "../models/TravelMode";
+import { 
+    AllTravelData, 
+    AllTravelDataUnformatted, 
+    ApiResponse, 
+    FormattedTravelData, 
+    Payload, 
+    RawTravelData, 
+    TravelMode 
+} from "../models/apiModels";
 import { computeTimeString, computeDistanceString } from "./stringFormatters";
 
 
@@ -11,57 +19,6 @@ function ensureString(str: string | undefined | void): string {
         throw new Error(`Not a valid string: ${str}`);
     }
     return str;
-}
-
-
-interface RawTravelData {
-    durationSeconds: number
-    distanceMeters: number
-}
-
-
-interface FormattedTravelData {
-    formattedTime: string
-    formattedDistance: string
-}
-
-
-export interface AllTravelData {
-    drive: FormattedTravelData | undefined
-    bicycle: FormattedTravelData | undefined
-    walk: FormattedTravelData | undefined
-    twoWheeler: FormattedTravelData | undefined
-    transit: FormattedTravelData | undefined
-}
-
-
-export interface AllTravelDataUnformatted {
-    driveRaw: RawTravelData | undefined
-    bicycleRaw: RawTravelData | undefined
-    walkRaw: RawTravelData | undefined
-    twoWheelerRaw: RawTravelData | undefined
-    transitRaw: RawTravelData | undefined
-}
-
-
-interface Payload {
-    "origin": { "address": string },
-    "destination": { "address": string },
-    "travelMode": TravelMode,
-    "languageCode": string,
-    "routingPreference"?: string,
-    "departureTime"?: string,
-}
-
-
-class ApiResponse {
-    "distanceMeters": number
-    "duration": string
-
-    constructor(distanceMeters: number, duration: string) {
-        this.distanceMeters = distanceMeters;
-        this.duration = duration;
-    }
 }
 
 
