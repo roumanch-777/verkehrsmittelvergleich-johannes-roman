@@ -3,7 +3,7 @@ import { AllTravelDataUnformatted } from '../api/googleMapsAPI';
 import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
 
 
-const durationAxisConverter = (value: number | string) => {
+const computeDurationAxis = (value: number | string) => {
     if (typeof value === "string") return value;
     if (value > 86400) { // 1 day
         // round on 0.5 d precision: round the double of the value and divide by 2
@@ -23,7 +23,7 @@ const durationAxisConverter = (value: number | string) => {
 };
 
 
-const distanceAxisConverter = (value: number | string) => {
+const computeDistanceAxis = (value: number | string) => {
     if (typeof value === "string") return value;
     if (value > 100_000) { // 100 km
         // round on 50 km precision: round the 50th of the value and multiply by 50
@@ -40,15 +40,6 @@ const distanceAxisConverter = (value: number | string) => {
 export enum LabelType {
     DURATION = "DURATION",
     DISTANCE = "DISTANCE",
-}
-
-interface DiagramData {
-    labels: string[];
-    datasets: {
-        label: string;
-        data: number[];
-        backgroundColor: string[];
-    }[];
 }
 
 
@@ -76,7 +67,7 @@ const labelMapper: Map<string, string> = new Map([
 ]);
 
 
-const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
+const computeLabeledData = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
     let result: LabeledDiagramDataProps = {};
     switch (diagramDataProps.label) {
         case LabelType.DURATION:
@@ -108,23 +99,8 @@ const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagra
 }
 
 
-export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, label }) => {
-    if (!allTravelDataUnformatted) {
-        return null;
-    }
-    const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
-    const labeledData = computeDataAndLabels({ allTravelDataUnformatted, label });
-    const formattedDiagramData: DiagramData = {
-        labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
-        datasets: [
-            {
-                label: labelStr,
-                data: Object.values(labeledData),
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
-            },
-        ],
-    };
-    const options = {
+const computeChartOptions = (label: LabelType): any => {
+    return {
         plugins: {
             legend: {
                 display: false,
@@ -142,12 +118,32 @@ export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, 
         scales: {
             y: {
                 ticks: {
-                    callback: label === LabelType.DURATION ? durationAxisConverter : distanceAxisConverter,
+                    callback: label === LabelType.DURATION ? computeDurationAxis : computeDistanceAxis,
                     maxTicksLimit: 6,
                 },
             },
         },
     };
+};
+
+
+export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, label }) => {
+    if (!allTravelDataUnformatted) {
+        return null;
+    }
+    const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
+    const labeledData = computeLabeledData({ allTravelDataUnformatted, label });
+    const formattedDiagramData = {
+        labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
+        datasets: [
+            {
+                label: labelStr,
+                data: Object.values(labeledData),
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+            },
+        ],
+    };
+    const options = computeChartOptions(label);
     return (
         <div className="chart-container">
             <h2 style={{ textAlign: "center" }}>{labelStr}</h2>
