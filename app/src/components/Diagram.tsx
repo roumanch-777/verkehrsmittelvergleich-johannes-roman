@@ -43,12 +43,6 @@ export enum LabelType {
 }
 
 
-interface DiagramDataProps {
-    allTravelDataUnformatted: AllTravelDataUnformatted | null;
-    label: LabelType;
-}
-
-
 interface LabeledDiagramDataProps {
     drive?: number
     bicycle?: number
@@ -67,29 +61,32 @@ const labelMapper: Map<string, string> = new Map([
 ]);
 
 
-const computeLabeledData = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
+const computeLabeledData = (
+    allTravelDataUnformatted: AllTravelDataUnformatted,
+    label: LabelType,
+): LabeledDiagramDataProps => {
     let result: LabeledDiagramDataProps = {};
-    switch (diagramDataProps.label) {
+    switch (label) {
         case LabelType.DURATION:
             result = {
-                drive: diagramDataProps.allTravelDataUnformatted?.driveRaw?.durationSeconds || 0,
-                bicycle: diagramDataProps.allTravelDataUnformatted?.bicycleRaw?.durationSeconds || 0,
-                walk: diagramDataProps.allTravelDataUnformatted?.walkRaw?.durationSeconds || 0,
-                twoWheeler: diagramDataProps.allTravelDataUnformatted?.twoWheelerRaw?.durationSeconds || 0,
-                transit: diagramDataProps.allTravelDataUnformatted?.transitRaw?.durationSeconds || 0,
+                drive: allTravelDataUnformatted.driveRaw?.durationSeconds || 0,
+                bicycle: allTravelDataUnformatted.bicycleRaw?.durationSeconds || 0,
+                walk: allTravelDataUnformatted.walkRaw?.durationSeconds || 0,
+                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.durationSeconds || 0,
+                transit: allTravelDataUnformatted.transitRaw?.durationSeconds || 0,
             };
             break;
         case LabelType.DISTANCE:
             result = {
-                drive: diagramDataProps.allTravelDataUnformatted?.driveRaw?.distanceMeters || 0,
-                bicycle: diagramDataProps.allTravelDataUnformatted?.bicycleRaw?.distanceMeters || 0,
-                walk: diagramDataProps.allTravelDataUnformatted?.walkRaw?.distanceMeters || 0,
-                twoWheeler: diagramDataProps.allTravelDataUnformatted?.twoWheelerRaw?.distanceMeters || 0,
-                transit: diagramDataProps.allTravelDataUnformatted?.transitRaw?.distanceMeters || 0,
+                drive: allTravelDataUnformatted.driveRaw?.distanceMeters || 0,
+                bicycle: allTravelDataUnformatted.bicycleRaw?.distanceMeters || 0,
+                walk: allTravelDataUnformatted.walkRaw?.distanceMeters || 0,
+                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.distanceMeters || 0,
+                transit: allTravelDataUnformatted.transitRaw?.distanceMeters || 0,
             };
             break;
         default:
-            throw new Error("Invalid label type");
+            throw new Error("Invalid label type: Label must be either DURATION or DISTANCE");
     }
     // Filter out fields with value `0`
     const filteredResult = Object.fromEntries(
@@ -127,12 +124,18 @@ const computeChartOptions = (label: LabelType): any => {
 };
 
 
+interface DiagramDataProps {
+    allTravelDataUnformatted: AllTravelDataUnformatted | null;
+    label: LabelType;
+}
+
+
 export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, label }) => {
     if (!allTravelDataUnformatted) {
         return null;
     }
     const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
-    const labeledData = computeLabeledData({ allTravelDataUnformatted, label });
+    const labeledData = computeLabeledData(allTravelDataUnformatted, label);
     const formattedDiagramData = {
         labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
         datasets: [
