@@ -1,5 +1,5 @@
 import EventBus from "./EventBus";
-import Messages from "../events/messages";
+import Messages from "../models/messages";
 
 export const formValidationHandler = () => {
     const validateForm = (

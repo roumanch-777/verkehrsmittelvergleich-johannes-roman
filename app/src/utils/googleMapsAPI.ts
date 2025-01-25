@@ -1,5 +1,5 @@
 import { TravelMode } from "../models/TravelMode";
-import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
+import { computeTimeString, computeDistanceString } from "./stringFormatters";
 
 
 const USE_REAL_API = false;

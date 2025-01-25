@@ -1,4 +1,4 @@
-import { AllTravelData } from "../api/googleMapsAPI";
+import { AllTravelData } from "../utils/googleMapsAPI";
 
 
 const meansToTitle: Record<string, string> = {

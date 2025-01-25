@@ -1,5 +1,5 @@
 import { Bar } from 'react-chartjs-2';
-import { AllTravelDataUnformatted } from '../api/googleMapsAPI';
+import { AllTravelDataUnformatted } from '../utils/googleMapsAPI';
 import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
 
 

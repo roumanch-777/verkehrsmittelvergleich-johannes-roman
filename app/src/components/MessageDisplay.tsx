@@ -1,7 +1,7 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import EventBus from '../utils/EventBus';
-import Messages from '../events/messages';
-import {toast, ToastContainer} from "react-toastify";
+import Messages from '../models/messages';
+import { toast, ToastContainer } from "react-toastify";
 
 const MessageDisplay = () => {
 
@@ -25,7 +25,7 @@ const MessageDisplay = () => {
 
     return (
         <div>
-            <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false}/>
+            <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} />
         </div>
     );
 };
