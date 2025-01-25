@@ -48,8 +48,8 @@ function App() {
             <InputField label="Zielort" value={to} onChange={setTo} />
             <Button onClick={handleSubmit}>Absenden</Button>
             <ComparisonTable allTravelData={allTravelData} />
-            <Diagram diagramData={diagramData} label={LabelType.DURATION} />
-            <Diagram diagramData={diagramData} label={LabelType.DISTANCE} />
+            <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DURATION} />
+            <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DISTANCE} />
         </div>
     );
 }

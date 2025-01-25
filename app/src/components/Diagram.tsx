@@ -53,7 +53,7 @@ interface DiagramData {
 
 
 interface DiagramDataProps {
-    diagramData: AllTravelDataUnformatted | null;
+    allTravelDataUnformatted: AllTravelDataUnformatted | null;
     label: LabelType;
 }
 
@@ -81,20 +81,20 @@ const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagra
     switch (diagramDataProps.label) {
         case LabelType.DURATION:
             result = {
-                drive: diagramDataProps.diagramData?.driveRaw?.durationSeconds || 0,
-                bicycle: diagramDataProps.diagramData?.bicycleRaw?.durationSeconds || 0,
-                walk: diagramDataProps.diagramData?.walkRaw?.durationSeconds || 0,
-                twoWheeler: diagramDataProps.diagramData?.twoWheelerRaw?.durationSeconds || 0,
-                transit: diagramDataProps.diagramData?.transitRaw?.durationSeconds || 0,
+                drive: diagramDataProps.allTravelDataUnformatted?.driveRaw?.durationSeconds || 0,
+                bicycle: diagramDataProps.allTravelDataUnformatted?.bicycleRaw?.durationSeconds || 0,
+                walk: diagramDataProps.allTravelDataUnformatted?.walkRaw?.durationSeconds || 0,
+                twoWheeler: diagramDataProps.allTravelDataUnformatted?.twoWheelerRaw?.durationSeconds || 0,
+                transit: diagramDataProps.allTravelDataUnformatted?.transitRaw?.durationSeconds || 0,
             };
             break;
         case LabelType.DISTANCE:
             result = {
-                drive: diagramDataProps.diagramData?.driveRaw?.distanceMeters || 0,
-                bicycle: diagramDataProps.diagramData?.bicycleRaw?.distanceMeters || 0,
-                walk: diagramDataProps.diagramData?.walkRaw?.distanceMeters || 0,
-                twoWheeler: diagramDataProps.diagramData?.twoWheelerRaw?.distanceMeters || 0,
-                transit: diagramDataProps.diagramData?.transitRaw?.distanceMeters || 0,
+                drive: diagramDataProps.allTravelDataUnformatted?.driveRaw?.distanceMeters || 0,
+                bicycle: diagramDataProps.allTravelDataUnformatted?.bicycleRaw?.distanceMeters || 0,
+                walk: diagramDataProps.allTravelDataUnformatted?.walkRaw?.distanceMeters || 0,
+                twoWheeler: diagramDataProps.allTravelDataUnformatted?.twoWheelerRaw?.distanceMeters || 0,
+                transit: diagramDataProps.allTravelDataUnformatted?.transitRaw?.distanceMeters || 0,
             };
             break;
         default:
@@ -108,12 +108,12 @@ const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagra
 }
 
 
-export const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
-    if (!diagramData) {
+export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, label }) => {
+    if (!allTravelDataUnformatted) {
         return null;
     }
     const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
-    const labeledData = computeDataAndLabels({ diagramData, label });
+    const labeledData = computeDataAndLabels({ allTravelDataUnformatted, label });
     const formattedDiagramData: DiagramData = {
         labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
         datasets: [
