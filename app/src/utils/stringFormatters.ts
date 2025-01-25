@@ -4,24 +4,42 @@ export const DAY = 24 * HOUR;
 
 
 export function computeDistanceString(meters_total: number): string {
-    if (meters_total < 1000) {  // < 1 km
-        return `${meters_total} m`;
+    let meters;
+    let kilometers;
+    let megameters;
+
+    // 0-999 m -> show meters
+    if (meters_total < 1000) {
+        return `${meters_total}m`;
     }
-    if (meters_total > 100_000) {  // > 100 km
-        const kilometers = Math.floor(meters_total / 1000);
-        return `${kilometers} km`;
+
+    // 1-100 km -> show kilometers with 1 decimal
+    if (meters_total >= 1000 && meters_total <= 100_000) {
+        kilometers = Math.floor(meters_total / 1000);
+        meters = meters_total % 1000;
+        let decimal = Math.round(meters / 100);
+        if(decimal === 0) {
+            return `${kilometers}km`
+        } else if(decimal === 10) {
+            return `${kilometers + 1}km`
+        } else {
+            return `${kilometers}.${decimal}km`
+        }
     }
-    // 1 km <= meters_total <= 100 km
-    const kilometers = Math.floor(meters_total / 1000);
-    const meters = meters_total % 1000;
-    const decimal = Math.round(meters / 100);
-    if(decimal === 0) {
-        return `${kilometers} km`
-    } else if(decimal === 10) {
-        return `${kilometers + 1} km`
-    } else {
-        return `${kilometers}.${decimal} km`
+
+    // 100-10'000 km -> show kilometers without decimals
+    if (meters_total > 100_000 && meters_total < 9_999_500) {
+        kilometers = Math.round(meters_total / 1000);
+        return `${kilometers}km`;
     }
+
+    // > 10'000 km -> show with thousands separator
+    megameters = Math.round(meters_total / 1_000_000);
+    let km = Math.round((meters_total % 1_000_000) / 1000).toString().padStart(3, "0");
+    if(km === "1000") {
+        km = "000";
+    }
+    return `${megameters}'${km}km`
 }
 
 

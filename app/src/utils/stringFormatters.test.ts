@@ -1,4 +1,57 @@
-import { computeTimeString, MINUTE, HOUR, DAY } from './stringFormatters';
+import { computeDistanceString, computeTimeString, MINUTE, HOUR, DAY } from './stringFormatters';
+
+
+describe("computeDistanceString", () => {
+    test("0m -> 0m", () => {
+        const result = computeDistanceString(0);
+        expect(result).toBe("0m");
+    });
+    test("999m -> 999m", () => {
+        const result = computeDistanceString(999);
+        expect(result).toBe("999m");
+    });
+    test("1049m -> 1km", () => {
+        const result = computeDistanceString(1049);
+        expect(result).toBe("1km");
+    });
+    test("1050m -> 1.1km", () => {
+        const result = computeDistanceString(1050);
+        expect(result).toBe("1.1km");
+    });
+    test("1949m -> 1.8km", () => {
+        const result = computeDistanceString(1949);
+        expect(result).toBe("1.9km");
+    });
+    test("1950m -> 2km", () => {
+        const result = computeDistanceString(1950);
+        expect(result).toBe("2km");
+    });
+    test("10'049m -> 10km", () => {
+        const result = computeDistanceString(10_049);
+        expect(result).toBe("10km");
+    });
+    test("10'050m -> 10.1km", () => {
+        const result = computeDistanceString(10_050);
+        expect(result).toBe("10.1km");
+    });
+    test("99'950m -> 100km", () => {
+        const result = computeDistanceString(99_950);
+        expect(result).toBe("100km");
+    });
+    test("9'999'499m -> 9999km", () => {
+        const result = computeDistanceString(9_999_499);
+        expect(result).toBe("9999km");
+    });
+    test("9'999'500m -> 10'000km", () => {
+        const result = computeDistanceString(9_999_500);
+        expect(result).toBe("10'000km");
+    });
+    test("10'000'500m -> 10'001km", () => {
+        const result = computeDistanceString(10_000_500);
+        expect(result).toBe("10'001km");
+    });
+});
+
 
 describe("computeTimeString", () => {
     test("0s", () => {
