@@ -126,6 +126,7 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
                         y: {
                             ticks: {
                                 callback: label === LabelType.DURATION ? duration_axis_converter : distance_axis_converter,
+                                maxTicksLimit: 6,
                             },
                         },
                     },
