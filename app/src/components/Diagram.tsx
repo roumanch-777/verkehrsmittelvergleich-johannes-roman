@@ -63,6 +63,15 @@ interface LabeledDiagramDataProps {
 }
 
 
+const labelMapper: Map<string, string> = new Map([
+    ["drive", "Auto"],
+    ["bicycle", "Velo"],
+    ["walk", "Zu Fuss"],
+    ["two_wheeler", "Motorrad"],
+    ["transit", "ÖV"],
+]);
+
+
 const compute_data_and_labels = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
     let result: LabeledDiagramDataProps = {};
     switch (diagramDataProps.label) {
@@ -102,7 +111,7 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
     const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
     const labeledData = compute_data_and_labels({ diagramData, label });
     const formattedDiagramData: DiagramData = {
-        labels: Object.keys(labeledData),
+        labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
         datasets: [
             {
                 label: labelStr,
