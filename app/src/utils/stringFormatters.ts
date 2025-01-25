@@ -26,18 +26,22 @@ export function computeDistanceString(meters_total: number): string {
 
 
 export function computeTimeString(seconds_total: number): string {
+    let minutes;
+    let hours;
+    let days;
+
     if (seconds_total < MINUTE) {
         return `${seconds_total}s`;
     }
     
     if (seconds_total < (HOUR - 30)) {  // < 59 min 30 s
-        let minutes = Math.round(seconds_total / 60);
+        minutes = Math.round(seconds_total / 60);
         return `${minutes}min`;
     }
 
     if (seconds_total < (DAY - 30)) {  // < 23 h 59 min 30 s
-        const hours = Math.floor(seconds_total / HOUR);
-        const minutes = Math.round((seconds_total % HOUR) / 60);
+        hours = Math.floor(seconds_total / HOUR);
+        minutes = Math.round((seconds_total % HOUR) / 60);
         if(minutes < MINUTE) {
             return `${hours}h ${minutes}min`
         } else {
@@ -45,7 +49,20 @@ export function computeTimeString(seconds_total: number): string {
         }
     }
 
-    const days = Math.floor(seconds_total / DAY);
-    const hours = Math.floor((seconds_total % DAY) / HOUR);
-    return `${days}d ${hours}h`
+    if (seconds_total >= (DAY - 30) && seconds_total < DAY) {
+        return `1d 0h 0min`
+    }
+
+    days = Math.floor(seconds_total / DAY);
+    hours = Math.floor((seconds_total % DAY) / HOUR);
+    minutes = Math.round((seconds_total % HOUR) / 60);
+    if (minutes === 60) {
+        hours += 1;
+        minutes = 0;
+    }
+    if (hours === 24) {
+        days += 1;
+        hours = 0;
+    }
+    return `${days}d ${hours}h ${minutes}min`
 }

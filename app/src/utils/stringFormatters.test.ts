@@ -49,17 +49,33 @@ describe("computeTimeString", () => {
         const result = computeTimeString((21 * HOUR) + (2 * MINUTE) + 20);
         expect(result).toBe("21h 2min");
     });
-    // test("23h 59min 40s -> 1d 0h", () => {
-    //     const result = computeTimeString((23 * HOUR) + (59 * MINUTE) + 40);
-    //     expect(result).toBe("1d 0h");
-    // });
-    test("1d 0h 12min 40s -> 1d 0h", () => {
-        const result = computeTimeString((1 * DAY) + (0 * HOUR) + (12 * MINUTE) + 40);
-        expect(result).toBe("1d 0h");
+    test("23h 59min 29s -> 23h 59min", () => {
+        const result = computeTimeString((23 * HOUR) + (59 * MINUTE) + 29);
+        expect(result).toBe("23h 59min");
     });
-    test("1d 12h 35min 1s -> 1d 13h", () => {
-        const result = computeTimeString((1 * DAY) + (12 * HOUR) + (35 * MINUTE) + 1);
-        expect(result).toBe("1d 13h");
+    test("23h 59min 30s -> 1d 0h 0min", () => {
+        const result = computeTimeString((23 * HOUR) + (59 * MINUTE) + 30);
+        expect(result).toBe("1d 0h 0min");
+    });
+    test("1d 0h 0min 30s -> 1d 0h 1min", () => {
+        const result = computeTimeString((1 * DAY) + (0 * HOUR) + (0 * MINUTE) + 30);
+        expect(result).toBe("1d 0h 1min");
+    });
+    test("1d 12h 35min 40s -> 1d 12h 36min", () => {
+        const result = computeTimeString((1 * DAY) + (12 * HOUR) + (35 * MINUTE) + 40);
+        expect(result).toBe("1d 12h 36min");
+    });
+    test("5d 6h 59min 29s -> 5d 6h 59min", () => {
+        const result = computeTimeString((5 * DAY) + (6 * HOUR) + (59 * MINUTE) + 29);
+        expect(result).toBe("5d 6h 59min");
+    });
+    test("5d 6h 59min 30s -> 5d 7h 0min", () => {
+        const result = computeTimeString((5 * DAY) + (6 * HOUR) + (59 * MINUTE) + 30);
+        expect(result).toBe("5d 7h 0min");
+    });
+    test("5d 23h 59min 30s -> 6d 0h 0min", () => {
+        const result = computeTimeString((5 * DAY) + (23 * HOUR) + (59 * MINUTE) + 30);
+        expect(result).toBe("6d 0h 0min");
     });
 });
 
