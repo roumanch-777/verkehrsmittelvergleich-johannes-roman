@@ -54,40 +54,66 @@ interface DiagramDataProps {
 }
 
 
+interface LabeledDiagramDataProps {
+    drive?: number
+    bicycle?: number
+    walk?: number
+    two_wheeler?: number
+    transit?: number
+}
+
+
+const compute_data_and_labels = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
+    let result: LabeledDiagramDataProps = {};
+    switch (diagramDataProps.label) {
+        case LabelType.DURATION:
+            result = {
+                drive: diagramDataProps.diagramData?.drive_raw?.durationSeconds || 0,
+                bicycle: diagramDataProps.diagramData?.bicycle_raw?.durationSeconds || 0,
+                walk: diagramDataProps.diagramData?.walk_raw?.durationSeconds || 0,
+                two_wheeler: diagramDataProps.diagramData?.two_wheeler_raw?.durationSeconds || 0,
+                transit: diagramDataProps.diagramData?.transit_raw?.durationSeconds || 0,
+            };
+            break;
+        case LabelType.DISTANCE:
+            result = {
+                drive: diagramDataProps.diagramData?.drive_raw?.distanceMeters || 0,
+                bicycle: diagramDataProps.diagramData?.bicycle_raw?.distanceMeters || 0,
+                walk: diagramDataProps.diagramData?.walk_raw?.distanceMeters || 0,
+                two_wheeler: diagramDataProps.diagramData?.two_wheeler_raw?.distanceMeters || 0,
+                transit: diagramDataProps.diagramData?.transit_raw?.distanceMeters || 0,
+            };
+            break;
+        default:
+            throw new Error("Invalid label type");
+    }
+    // Filter out fields with value `0`
+    const filteredResult = Object.fromEntries(
+        Object.entries(result).filter(([_, value]) => value !== 0)
+    );
+    return filteredResult;
+}
+
+
 const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
     if (!diagramData) {
         return null;
     }
-    const label_str = label === LabelType.DURATION ? "Dauer" : "Distanz";
-    const data = label === LabelType.DURATION ?
-        [
-            diagramData.drive_raw?.durationSeconds || 0,
-            diagramData.bicycle_raw?.durationSeconds || 0,
-            diagramData.walk_raw?.durationSeconds || 0,
-            diagramData.two_wheeler_raw?.durationSeconds || 0,
-            diagramData.transit_raw?.durationSeconds || 0,
-        ]
-        :
-        [
-            diagramData.drive_raw?.distanceMeters || 0,
-            diagramData.bicycle_raw?.distanceMeters || 0,
-            diagramData.walk_raw?.distanceMeters || 0,
-            diagramData.two_wheeler_raw?.distanceMeters || 0,
-            diagramData.transit_raw?.distanceMeters || 0,
-        ];
+    const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
+    const labeledData = compute_data_and_labels({ diagramData, label });
     const formattedDiagramData: DiagramData = {
-        labels: ["Auto", "Fahrrad", "Zu Fuß", "Motorrad", "Öffentliche Verkehrsmittel"],
+        labels: Object.keys(labeledData),
         datasets: [
             {
-                label: label_str,
-                data: data,
+                label: labelStr,
+                data: Object.values(labeledData),
                 backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
             },
         ],
     };
     return (
         <div className="chart-container">
-            <h2 style={{ textAlign: "center" }}>{label_str}</h2>
+            <h2 style={{ textAlign: "center" }}>{labelStr}</h2>
             <Bar
                 data={formattedDiagramData}
                 options={{
