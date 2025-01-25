@@ -1,24 +1,22 @@
 export function computeDistanceString(meters_total: number): string {
-    let formattedDistance: string;
-    if (meters_total < 1000) {
-        formattedDistance = `${meters_total} m`;
-    } else {
-        const kilometers = Math.floor(meters_total / 1000);
-        const meters = meters_total % 1000;
-        if(kilometers < 100) {
-            const decimal = Math.round(meters / 100);
-            if(decimal === 0) {
-                formattedDistance = `${kilometers} km`
-            } else if(decimal === 10) {
-                formattedDistance = `${kilometers + 1} km`
-            } else {
-                formattedDistance = `${kilometers}.${decimal} km`
-            }
-        } else {
-            formattedDistance = `${kilometers} km`;
-        }
+    if (meters_total < 1000) {  // < 1 km
+        return `${meters_total} m`;
     }
-    return formattedDistance
+    if (meters_total > 100_000) {  // > 100 km
+        const kilometers = Math.floor(meters_total / 1000);
+        return `${kilometers} km`;
+    }
+    // 1 km <= meters_total <= 100 km
+    const kilometers = Math.floor(meters_total / 1000);
+    const meters = meters_total % 1000;
+    const decimal = Math.round(meters / 100);
+    if(decimal === 0) {
+        return `${kilometers} km`
+    } else if(decimal === 10) {
+        return `${kilometers + 1} km`
+    } else {
+        return `${kilometers}.${decimal} km`
+    }
 }
 
 
