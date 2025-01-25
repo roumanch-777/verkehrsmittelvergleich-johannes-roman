@@ -34,6 +34,15 @@ export interface AllTravelData {
 }
 
 
+export interface AllTravelDataUnformatted {
+    drive_raw: RawTravelData | undefined
+    bicycle_raw: RawTravelData | undefined
+    walk_raw: RawTravelData | undefined
+    two_wheeler_raw: RawTravelData | undefined
+    transit_raw: RawTravelData | undefined
+}
+
+
 interface Payload {
     "origin": {"address": string},
     "destination": {"address": string},
@@ -58,24 +67,36 @@ class ApiResponse {
 const sampleResponse = new ApiResponse(121556, "5535s")
 
 
-export async function getAllTravelData(from: string, to: string, departureTime: Date | null, setAllTravelData: (data: AllTravelData) => void): Promise<void> {
-    const drive = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
-    const bicycle = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
-    const walk = await getTravelData(from, to, departureTime, TravelMode.WALK);
-    const two_wheeler = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
-    const transit = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
+export async function getAllTravelData(
+    from: string, 
+    to: string, 
+    departureTime: Date | null, 
+    setAllTravelData: (data: AllTravelData) => void,
+    setDiagramData: (data: AllTravelDataUnformatted) => void,
+): Promise<void> {
+    const [drive, drive_raw] = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
+    const [bicycle, bicycle_raw] = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
+    const [walk, walk_raw] = await getTravelData(from, to, departureTime, TravelMode.WALK);
+    const [two_wheeler, two_wheeler_raw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
+    const [transit, transit_raw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     setAllTravelData({drive, bicycle, walk, two_wheeler, transit});
+    setDiagramData({drive_raw, bicycle_raw, walk_raw, two_wheeler_raw, transit_raw});
 }
 
 
-async function getTravelData(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<FormattedTravelData | undefined> {
+async function getTravelData(
+    from: string, 
+    to: string, 
+    departureTime: Date | null, 
+    mode: TravelMode
+): Promise<[FormattedTravelData | undefined, RawTravelData | undefined]> {
     const rawTravelData = await getRawData(from, to, departureTime, mode);
     if(!rawTravelData) {
-        return;
+        return [undefined, undefined];
     }
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const formattedDistance = computeDistanceString(rawTravelData.distanceMeters);
-    return {formattedTime, formattedDistance};
+    return [{formattedTime, formattedDistance}, rawTravelData];
 }
 
 
