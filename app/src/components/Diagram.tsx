@@ -11,21 +11,21 @@ const duration_axis_converter = (value: number | string) => {
         // round on 30 min precision: round the double of the value and divide by 2
         return `${Math.round(value / (3600 / 2)) / 2} h`;
     } else if (value > 60) { // 1 min
-        // round on 10 min precision: round the 10th of the value and multiply by 10
-        return `${Math.round(value / (60 * 10)) * 10} min`;
+        // round on 5 min precision: round the 5th of the value and multiply by 5
+        return `${Math.round(value / (60 * 5)) * 5} min`;
     } else {
         return `${value} s`;
     }
 };
 
 
-const time_axis_converter = (value: number | string) => {
+const distance_axis_converter = (value: number | string) => {
     if (typeof value === "string") return value;
-    if (value > 100000) { // 100 km
-        // round on 50 km precision: round the double of the value and divide by 2
-        return `${Math.floor(value / (100000 / 2)) / 2} km`;
+    if (value > 100_000) { // 100 km
+        // round on 50 km precision: round the 50th of the value and multiply by 50
+        return `${Math.floor(value / (100000 * 50)) * 50} km`;
     } else if (value > 1000) { // 1 km
-        // round on 500 m precision: round the double of the value and divide by 2
+        // round on 0.5 km precision: round the double of the value and divide by 2
         return `${Math.round(value / (1000 / 2)) / 2} km`;
     } else {
         return `${value} m`;
@@ -99,7 +99,7 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
                     scales: {
                         y: {
                             ticks: {
-                                callback: label === LabelType.DURATION ? duration_axis_converter : time_axis_converter,
+                                callback: label === LabelType.DURATION ? duration_axis_converter : distance_axis_converter,
                             },
                         },
                     },
