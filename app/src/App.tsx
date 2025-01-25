@@ -47,7 +47,7 @@ function App() {
             <DatumPicker label="Abfahrtszeit" value={departureTime} onChange={setDepartureTime} />
             <InputField label="Zielort" value={to} onChange={setTo} />
             <Button onClick={handleSubmit}>Absenden</Button>
-            <ComparisonTable all_travel_data={allTravelData} />
+            <ComparisonTable allTravelData={allTravelData} />
             <Diagram diagramData={diagramData} label={LabelType.DURATION} />
             <Diagram diagramData={diagramData} label={LabelType.DISTANCE} />
         </div>

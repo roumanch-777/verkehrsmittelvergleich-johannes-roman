@@ -3,10 +3,10 @@ import { computeTimeString, computeDistanceString } from "../utils/stringFormatt
 
 
 const USE_REAL_API = false;
-const API_KEY = ensure_string(process.env.REACT_APP_API_KEY);
+const API_KEY = ensureString(process.env.REACT_APP_API_KEY);
 
 
-function ensure_string(str: string | undefined | void): string {
+function ensureString(str: string | undefined | void): string {
     if (!str) {
         throw new Error(`Not a valid string: ${str}`);
     }
@@ -30,17 +30,17 @@ export interface AllTravelData {
     drive: FormattedTravelData | undefined
     bicycle: FormattedTravelData | undefined
     walk: FormattedTravelData | undefined
-    two_wheeler: FormattedTravelData | undefined
+    twoWheeler: FormattedTravelData | undefined
     transit: FormattedTravelData | undefined
 }
 
 
 export interface AllTravelDataUnformatted {
-    drive_raw: RawTravelData | undefined
-    bicycle_raw: RawTravelData | undefined
-    walk_raw: RawTravelData | undefined
-    two_wheeler_raw: RawTravelData | undefined
-    transit_raw: RawTravelData | undefined
+    driveRaw: RawTravelData | undefined
+    bicycleRaw: RawTravelData | undefined
+    walkRaw: RawTravelData | undefined
+    twoWheelerRaw: RawTravelData | undefined
+    transitRaw: RawTravelData | undefined
 }
 
 
@@ -75,13 +75,13 @@ export async function getAllTravelData(
     setAllTravelData: (data: AllTravelData) => void,
     setDiagramData: (data: AllTravelDataUnformatted) => void,
 ): Promise<void> {
-    const [drive, drive_raw] = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
-    const [bicycle, bicycle_raw] = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
-    const [walk, walk_raw] = await getTravelData(from, to, departureTime, TravelMode.WALK);
-    const [two_wheeler, two_wheeler_raw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
-    const [transit, transit_raw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
-    setAllTravelData({ drive, bicycle, walk, two_wheeler, transit });
-    setDiagramData({ drive_raw, bicycle_raw, walk_raw, two_wheeler_raw, transit_raw });
+    const [drive, driveRaw] = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
+    const [bicycle, bicycleRaw] = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
+    const [walk, walkRaw] = await getTravelData(from, to, departureTime, TravelMode.WALK);
+    const [twoWheeler, twoWheelerRaw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
+    const [transit, transitRaw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
+    setAllTravelData({ drive, bicycle, walk, twoWheeler: twoWheeler, transit });
+    setDiagramData({ driveRaw: driveRaw, bicycleRaw: bicycleRaw, walkRaw: walkRaw, twoWheelerRaw: twoWheelerRaw, transitRaw: transitRaw });
 }
 
 
