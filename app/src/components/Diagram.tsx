@@ -108,7 +108,7 @@ const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagra
 }
 
 
-const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
+export const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
     if (!diagramData) {
         return null;
     }
@@ -158,5 +158,3 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
         </div>
     );
 };
-
-export default Diagram;

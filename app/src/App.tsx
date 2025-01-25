@@ -10,7 +10,7 @@ import { AllTravelData, AllTravelDataUnformatted, getAllTravelData } from './api
 import EventBus from "./utils/EventBus";
 import Messages from "./events/messages";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';
-import Diagram, { LabelType } from './components/Diagram';
+import { Diagram, LabelType } from './components/Diagram';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip);
 
