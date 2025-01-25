@@ -6,7 +6,7 @@ interface Props {
     onChange: (value: string) => void;
 }
 
-function InputField({label, value, onChange}: Props) {
+export function InputField({label, value, onChange}: Props) {
     return (
         <>
             <label htmlFor={label}>{label}:</label>
@@ -18,7 +18,6 @@ function InputField({label, value, onChange}: Props) {
                 onChange={(e) => onChange(e.target.value)}
             >
             </input>
-        </>)
+        </>
+    );
 }
-
-export default InputField;

@@ -15,7 +15,7 @@ interface ComparisonTableProps {
 }
 
 
-const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData }) => {
+export const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData }) => {
     if (!allTravelData) {
         return null;
     }
@@ -46,5 +46,3 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData }) => {
         </table>
     );
 };
-
-export default ComparisonTable;

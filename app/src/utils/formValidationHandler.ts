@@ -1,5 +1,5 @@
-import EventBus from "./EventBus";
-import Messages from "../models/messages";
+import { eventBus } from "./EventBus";
+import { Messages } from "../models/messages";
 
 export const formValidationHandler = () => {
     const validateForm = (
@@ -8,12 +8,12 @@ export const formValidationHandler = () => {
         departureTime: Date | null
     ): boolean => {
         if (!from || !to) {
-            EventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrts- und Zielort ausfüllen!");
+            eventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrts- und Zielort ausfüllen!");
             return false;
         }
 
         if (!departureTime) {
-            EventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrtszeit angeben!");
+            eventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrtszeit angeben!");
             return false;
         }
 

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import Title from "./components/Title";
-import ComparisonTable from './components/ComparisonTable';
-import InputField from './components/InputField'
-import Button from './components/Button'
+import { Title } from "./components/Title";
+import { ComparisonTable } from './components/ComparisonTable';
+import { InputField } from './components/InputField'
+import { Button } from './components/Button'
 import { DatePicker } from "./components/DatePicker";
 import { formValidationHandler } from "./utils/formValidationHandler";
-import MessageDisplay from "./components/MessageDisplay";
+import { MessageDisplay } from "./components/MessageDisplay";
 import { AllTravelData, AllTravelDataUnformatted, getAllTravelData } from './utils/googleMapsAPI';
-import EventBus from "./utils/EventBus";
-import Messages from "./models/messages";
+import { eventBus } from "./utils/EventBus";
+import { Messages } from "./models/messages";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';
 import { Diagram, LabelType } from './components/Diagram';
 
@@ -34,7 +34,7 @@ function App() {
 
         const requestData = { from, to, departureTime };
         console.log("Formulardaten erfolgreich veröffentlicht:", requestData);
-        EventBus.publish(Messages.FORM_SUBMITTED, "Einen Moment bitte, wir gehen bei Google nachfragen...");
+        eventBus.publish(Messages.FORM_SUBMITTED, "Einen Moment bitte, wir gehen bei Google nachfragen...");
         getAllTravelData(from, to, departureTime, setAllTravelData, setDiagramData);
 
     };

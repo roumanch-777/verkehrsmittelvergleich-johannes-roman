@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import EventBus from '../utils/EventBus';
-import Messages from '../models/messages';
+import { eventBus } from '../utils/EventBus';
+import { Messages } from '../models/messages';
 import { toast, ToastContainer } from "react-toastify";
 
-const MessageDisplay = () => {
+export const MessageDisplay = () => {
 
     useEffect(() => {
         const handleFormError = (message: string) => {
@@ -14,12 +14,12 @@ const MessageDisplay = () => {
             toast.success(message);
         }
 
-        EventBus.subscribe(Messages.FORM_ERROR, handleFormError);
-        EventBus.subscribe(Messages.FORM_SUBMITTED, handelFormSuccess);
+        eventBus.subscribe(Messages.FORM_ERROR, handleFormError);
+        eventBus.subscribe(Messages.FORM_SUBMITTED, handelFormSuccess);
 
         return () => {
-            EventBus.unsubscribe(Messages.FORM_ERROR, handleFormError);
-            EventBus.unsubscribe(Messages.FORM_SUBMITTED, handelFormSuccess);
+            eventBus.unsubscribe(Messages.FORM_ERROR, handleFormError);
+            eventBus.unsubscribe(Messages.FORM_SUBMITTED, handelFormSuccess);
         };
     }, []);
 
@@ -29,5 +29,3 @@ const MessageDisplay = () => {
         </div>
     );
 };
-
-export default MessageDisplay;
