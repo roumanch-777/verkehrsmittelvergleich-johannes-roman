@@ -1,4 +1,4 @@
-import { AllTravelData } from "../api/google-maps-routes-api";
+import { AllTravelData } from "../api/googleMapsAPI";
 
 
 const means_to_title: Record<string, string> = {
@@ -15,7 +15,7 @@ interface ComparisonTableProps {
 }
 
 
-const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
+const ComparisonTable: React.FC<ComparisonTableProps> = ({ all_travel_data }) => {
     if (!all_travel_data) {
         return null;
     }
@@ -32,7 +32,7 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
             </thead>
             <tbody>
                 {all_means.map((means, index) => {
-                    if(all_values[index] === undefined) {
+                    if (all_values[index] === undefined) {
                         return null
                     } else {
                         return <tr key={means}>
@@ -40,7 +40,8 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({all_travel_data}) => {
                             <td>{all_values[index].formattedDistance}</td>
                             <td>{all_values[index].formattedTime}</td>
                         </tr>
-                }})}
+                    }
+                })}
             </tbody>
         </table>
     );

@@ -1,6 +1,6 @@
 import { Bar } from 'react-chartjs-2';
-import { AllTravelDataUnformatted } from '../api/google-maps-routes-api';
-import {computeTimeString, computeDistanceString} from "../utils/stringFormatters";
+import { AllTravelDataUnformatted } from '../api/googleMapsAPI';
+import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
 
 
 const duration_axis_converter = (value: number | string) => {
@@ -124,7 +124,7 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
             },
         ],
     };
-    const options={
+    const options = {
         plugins: {
             legend: {
                 display: false,

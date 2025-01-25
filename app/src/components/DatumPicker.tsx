@@ -1,7 +1,7 @@
 import React from "react";
-import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFnsV3";
-import {de} from "date-fns/locale";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { de } from "date-fns/locale";
 
 interface Props {
     label: string;
@@ -9,7 +9,7 @@ interface Props {
     onChange: (value: Date | null) => void;
 }
 
-function DatumPicker({label, value, onChange}: Props) {
+function DatumPicker({ label, value, onChange }: Props) {
     return (
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={de}>

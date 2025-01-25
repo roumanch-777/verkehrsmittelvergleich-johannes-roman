@@ -18,9 +18,9 @@ export function computeDistanceString(meters_total: number): string {
         kilometers = Math.floor(meters_total / 1000);
         meters = meters_total % 1000;
         let decimal = Math.round(meters / 100);
-        if(decimal === 0) {
+        if (decimal === 0) {
             return `${kilometers}km`
-        } else if(decimal === 10) {
+        } else if (decimal === 10) {
             return `${kilometers + 1}km`
         } else {
             return `${kilometers}.${decimal}km`
@@ -36,7 +36,7 @@ export function computeDistanceString(meters_total: number): string {
     // > 10'000 km -> show with thousands separator
     megameters = Math.round(meters_total / 1_000_000);
     let km = Math.round((meters_total % 1_000_000) / 1000).toString().padStart(3, "0");
-    if(km === "1000") {
+    if (km === "1000") {
         km = "000";
     }
     return `${megameters}'${km}km`
@@ -51,7 +51,7 @@ export function computeTimeString(seconds_total: number): string {
     if (seconds_total < MINUTE) {
         return `${seconds_total}s`;
     }
-    
+
     if (seconds_total < (HOUR - 30)) {  // < 59 min 30 s
         minutes = Math.round(seconds_total / 60);
         return `${minutes}min`;
@@ -60,7 +60,7 @@ export function computeTimeString(seconds_total: number): string {
     if (seconds_total < (DAY - 30)) {  // < 23 h 59 min 30 s
         hours = Math.floor(seconds_total / HOUR);
         minutes = Math.round((seconds_total % HOUR) / 60);
-        if(minutes < MINUTE) {
+        if (minutes < MINUTE) {
             return `${hours}h ${minutes}min`
         } else {
             return `${hours + 1}h 0min`

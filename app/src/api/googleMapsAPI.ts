@@ -1,5 +1,5 @@
-import {TravelMode} from "../models/travel-mode";
-import {computeTimeString, computeDistanceString} from "../utils/stringFormatters";
+import { TravelMode } from "../models/TravelMode";
+import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
 
 
 const USE_REAL_API = false;
@@ -45,8 +45,8 @@ export interface AllTravelDataUnformatted {
 
 
 interface Payload {
-    "origin": {"address": string},
-    "destination": {"address": string},
+    "origin": { "address": string },
+    "destination": { "address": string },
     "travelMode": TravelMode,
     "languageCode": string,
     "routingPreference"?: string,
@@ -69,9 +69,9 @@ const sampleResponse = new ApiResponse(121556, "5535s")
 
 
 export async function getAllTravelData(
-    from: string, 
-    to: string, 
-    departureTime: Date | null, 
+    from: string,
+    to: string,
+    departureTime: Date | null,
     setAllTravelData: (data: AllTravelData) => void,
     setDiagramData: (data: AllTravelDataUnformatted) => void,
 ): Promise<void> {
@@ -80,24 +80,24 @@ export async function getAllTravelData(
     const [walk, walk_raw] = await getTravelData(from, to, departureTime, TravelMode.WALK);
     const [two_wheeler, two_wheeler_raw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const [transit, transit_raw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
-    setAllTravelData({drive, bicycle, walk, two_wheeler, transit});
-    setDiagramData({drive_raw, bicycle_raw, walk_raw, two_wheeler_raw, transit_raw});
+    setAllTravelData({ drive, bicycle, walk, two_wheeler, transit });
+    setDiagramData({ drive_raw, bicycle_raw, walk_raw, two_wheeler_raw, transit_raw });
 }
 
 
 async function getTravelData(
-    from: string, 
-    to: string, 
-    departureTime: Date | null, 
+    from: string,
+    to: string,
+    departureTime: Date | null,
     mode: TravelMode
 ): Promise<[FormattedTravelData | undefined, RawTravelData | undefined]> {
     const rawTravelData = await getRawData(from, to, departureTime, mode);
-    if(!rawTravelData) {
+    if (!rawTravelData) {
         return [undefined, undefined];
     }
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const formattedDistance = computeDistanceString(rawTravelData.distanceMeters);
-    return [{formattedTime, formattedDistance}, rawTravelData];
+    return [{ formattedTime, formattedDistance }, rawTravelData];
 }
 
 
@@ -105,7 +105,7 @@ async function getRawData(from: string, to: string, departureTime: Date | null, 
     let raw: ApiResponse | undefined;
     if (USE_REAL_API) {
         raw = await makeApiCall(from, to, departureTime, mode);
-        if(!raw) {
+        if (!raw) {
             return;
         }
     } else {
@@ -113,22 +113,22 @@ async function getRawData(from: string, to: string, departureTime: Date | null, 
     }
     const distanceMeters = raw.distanceMeters;
     const durationSeconds = parseInt(raw.duration.replace(/s$/, ""));
-    return {distanceMeters, durationSeconds};
+    return { distanceMeters, durationSeconds };
 }
 
 
 async function makeApiCall(from: string, to: string, departureTime: Date | null, mode: TravelMode): Promise<ApiResponse | undefined> {
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload: Payload = {
-        "origin": {"address": from},
-        "destination": {"address": to},
+        "origin": { "address": from },
+        "destination": { "address": to },
         "travelMode": mode,
         "languageCode": "de-CH",
     };
-    if(departureTime && departureTime > new Date()) {
+    if (departureTime && departureTime > new Date()) {
         payload["departureTime"] = departureTime.toISOString();
     };
-    if(mode !== TravelMode.WALK && mode !== TravelMode.BICYCLE && mode !== TravelMode.TRANSIT) {
+    if (mode !== TravelMode.WALK && mode !== TravelMode.BICYCLE && mode !== TravelMode.TRANSIT) {
         payload["routingPreference"] = "TRAFFIC_AWARE";
     };
     const headers = {
@@ -141,9 +141,9 @@ async function makeApiCall(from: string, to: string, departureTime: Date | null,
         headers: headers,
         body: JSON.stringify(payload)
     });
-    if(!response.ok) throw new Error();
+    if (!response.ok) throw new Error();
     const data = await response.json();
-    if(data && "routes" in data && data["routes"].length > 0) {
+    if (data && "routes" in data && data["routes"].length > 0) {
         console.log(`Received a route for mode ${mode.valueOf()} (from '${from}' to '${to}')`);
         return new ApiResponse(data.routes[0].distanceMeters, data.routes[0].duration);
     } else {
