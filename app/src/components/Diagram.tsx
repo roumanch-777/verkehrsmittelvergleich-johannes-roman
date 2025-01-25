@@ -3,7 +3,7 @@ import { AllTravelDataUnformatted } from '../api/googleMapsAPI';
 import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
 
 
-const durationAxisConverter = (value: number | string) => {
+const computeDurationAxis = (value: number | string) => {
     if (typeof value === "string") return value;
     if (value > 86400) { // 1 day
         // round on 0.5 d precision: round the double of the value and divide by 2
@@ -23,7 +23,7 @@ const durationAxisConverter = (value: number | string) => {
 };
 
 
-const distanceAxisConverter = (value: number | string) => {
+const computeDistanceAxis = (value: number | string) => {
     if (typeof value === "string") return value;
     if (value > 100_000) { // 100 km
         // round on 50 km precision: round the 50th of the value and multiply by 50
@@ -40,21 +40,6 @@ const distanceAxisConverter = (value: number | string) => {
 export enum LabelType {
     DURATION = "DURATION",
     DISTANCE = "DISTANCE",
-}
-
-interface DiagramData {
-    labels: string[];
-    datasets: {
-        label: string;
-        data: number[];
-        backgroundColor: string[];
-    }[];
-}
-
-
-interface DiagramDataProps {
-    diagramData: AllTravelDataUnformatted | null;
-    label: LabelType;
 }
 
 
@@ -76,29 +61,32 @@ const labelMapper: Map<string, string> = new Map([
 ]);
 
 
-const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagramDataProps => {
+const computeLabeledData = (
+    allTravelDataUnformatted: AllTravelDataUnformatted,
+    label: LabelType,
+): LabeledDiagramDataProps => {
     let result: LabeledDiagramDataProps = {};
-    switch (diagramDataProps.label) {
+    switch (label) {
         case LabelType.DURATION:
             result = {
-                drive: diagramDataProps.diagramData?.driveRaw?.durationSeconds || 0,
-                bicycle: diagramDataProps.diagramData?.bicycleRaw?.durationSeconds || 0,
-                walk: diagramDataProps.diagramData?.walkRaw?.durationSeconds || 0,
-                twoWheeler: diagramDataProps.diagramData?.twoWheelerRaw?.durationSeconds || 0,
-                transit: diagramDataProps.diagramData?.transitRaw?.durationSeconds || 0,
+                drive: allTravelDataUnformatted.driveRaw?.durationSeconds || 0,
+                bicycle: allTravelDataUnformatted.bicycleRaw?.durationSeconds || 0,
+                walk: allTravelDataUnformatted.walkRaw?.durationSeconds || 0,
+                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.durationSeconds || 0,
+                transit: allTravelDataUnformatted.transitRaw?.durationSeconds || 0,
             };
             break;
         case LabelType.DISTANCE:
             result = {
-                drive: diagramDataProps.diagramData?.driveRaw?.distanceMeters || 0,
-                bicycle: diagramDataProps.diagramData?.bicycleRaw?.distanceMeters || 0,
-                walk: diagramDataProps.diagramData?.walkRaw?.distanceMeters || 0,
-                twoWheeler: diagramDataProps.diagramData?.twoWheelerRaw?.distanceMeters || 0,
-                transit: diagramDataProps.diagramData?.transitRaw?.distanceMeters || 0,
+                drive: allTravelDataUnformatted.driveRaw?.distanceMeters || 0,
+                bicycle: allTravelDataUnformatted.bicycleRaw?.distanceMeters || 0,
+                walk: allTravelDataUnformatted.walkRaw?.distanceMeters || 0,
+                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.distanceMeters || 0,
+                transit: allTravelDataUnformatted.transitRaw?.distanceMeters || 0,
             };
             break;
         default:
-            throw new Error("Invalid label type");
+            throw new Error("Invalid label type: Label must be either DURATION or DISTANCE");
     }
     // Filter out fields with value `0`
     const filteredResult = Object.fromEntries(
@@ -108,23 +96,8 @@ const computeDataAndLabels = (diagramDataProps: DiagramDataProps): LabeledDiagra
 }
 
 
-const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
-    if (!diagramData) {
-        return null;
-    }
-    const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
-    const labeledData = computeDataAndLabels({ diagramData, label });
-    const formattedDiagramData: DiagramData = {
-        labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
-        datasets: [
-            {
-                label: labelStr,
-                data: Object.values(labeledData),
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
-            },
-        ],
-    };
-    const options = {
+const computeChartOptions = (label: LabelType): any => {
+    return {
         plugins: {
             legend: {
                 display: false,
@@ -142,12 +115,38 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
         scales: {
             y: {
                 ticks: {
-                    callback: label === LabelType.DURATION ? durationAxisConverter : distanceAxisConverter,
+                    callback: label === LabelType.DURATION ? computeDurationAxis : computeDistanceAxis,
                     maxTicksLimit: 6,
                 },
             },
         },
     };
+};
+
+
+interface DiagramDataProps {
+    allTravelDataUnformatted: AllTravelDataUnformatted | null;
+    label: LabelType;
+}
+
+
+export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, label }) => {
+    if (!allTravelDataUnformatted) {
+        return null;
+    }
+    const labelStr = label === LabelType.DURATION ? "Dauer" : "Distanz";
+    const labeledData = computeLabeledData(allTravelDataUnformatted, label);
+    const formattedDiagramData = {
+        labels: Object.keys(labeledData).map((value) => labelMapper.get(value) || ""),
+        datasets: [
+            {
+                label: labelStr,
+                data: Object.values(labeledData),
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+            },
+        ],
+    };
+    const options = computeChartOptions(label);
     return (
         <div className="chart-container">
             <h2 style={{ textAlign: "center" }}>{labelStr}</h2>
@@ -158,5 +157,3 @@ const Diagram: React.FC<DiagramDataProps> = ({ diagramData, label }) => {
         </div>
     );
 };
-
-export default Diagram;
