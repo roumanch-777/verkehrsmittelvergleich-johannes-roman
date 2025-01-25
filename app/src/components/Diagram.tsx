@@ -14,7 +14,7 @@ const duration_axis_converter = (value: number | string) => {
         // round on 5 min precision: round the 5th of the value and multiply by 5
         return `${Math.round(value / (60 * 5)) * 5} min`;
     } else {
-        return `${value} s`;
+        return "0 min";
     }
 };
 
@@ -23,7 +23,7 @@ const distance_axis_converter = (value: number | string) => {
     if (typeof value === "string") return value;
     if (value > 100_000) { // 100 km
         // round on 50 km precision: round the 50th of the value and multiply by 50
-        return `${Math.floor(value / (100000 * 50)) * 50} km`;
+        return `${Math.round(value / (1000 * 50)) * 50} km`;
     } else if (value > 1000) { // 1 km
         // round on 0.5 km precision: round the double of the value and divide by 2
         return `${Math.round(value / (1000 / 2)) / 2} km`;
