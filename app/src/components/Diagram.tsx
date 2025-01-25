@@ -7,6 +7,9 @@ const duration_axis_converter = (value: number | string) => {
     if (value > 86400) { // 1 day
         // round on 0.5 d precision: round the double of the value and divide by 2
         return `${Math.floor(value / (86400 / 2)) / 2} d`;
+    } else if (value > 36_000) { // 10 hours
+        // round on 1 hour precision: round the number
+        return `${Math.round(value / 3600)} h`;
     } else if (value > 3600) { // 1 hour
         // round on 30 min precision: round the double of the value and divide by 2
         return `${Math.round(value / (3600 / 2)) / 2} h`;
