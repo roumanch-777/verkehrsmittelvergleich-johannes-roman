@@ -3,4 +3,5 @@ export const Messages = {
     FORM_ERROR: "FORM_ERROR",
     FORM_VALIDATED: "FORM_VALIDATED",
     DATA_SAVED: "DATA_SAVED",
+    DATA_RECEIVED: "DATA_RECEIVED"
 };

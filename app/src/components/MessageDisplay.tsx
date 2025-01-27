@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import { eventBus } from '../utils/EventBus';
-import { Messages } from '../models/messages';
-import { toast, ToastContainer } from "react-toastify";
+import {useEffect} from 'react';
+import {eventBus} from '../utils/EventBus';
+import {Messages} from '../models/messages';
+import {toast, ToastContainer} from "react-toastify";
 
 export const MessageDisplay = () => {
 
     useEffect(() => {
-        const handleFormError = (message: string) => {
-            toast.error(message);
+        const handleFormError = (errorMessage: { field: string, message: string }) => {
+            toast.error(errorMessage.message);
         };
 
-        const handelFormSuccess = (message: string) => {
-            toast.success(message);
+        const handelFormSuccess = (successMessage: string) => {
+            toast.success(successMessage);
         }
 
         eventBus.subscribe(Messages.FORM_ERROR, handleFormError);
@@ -25,7 +25,7 @@ export const MessageDisplay = () => {
 
     return (
         <div>
-            <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} />
+            <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false}/>
         </div>
     );
 };

@@ -4,21 +4,33 @@ type Callback = (data?: any) => void;
 class EventBus {
     private events: Record<string, Callback[]> = {};
 
-    subscribe(event: string, callback: Callback) {
-        if (!this.events[event]) {
-            this.events[event] = [];
-        }
-        this.events[event].push(callback);
+    subscribe(events: string | string[], callback: Callback) {
+        const eventList = Array.isArray(events) ? events : [events];
+
+        eventList.forEach((event) => {
+            if (!this.events[event]) {
+                this.events[event] = [];
+            }
+            this.events[event].push(callback);
+        });
     }
 
-    unsubscribe(event: string, callback: Callback) {
-        if (!this.events[event]) return;
-        this.events[event] = this.events[event].filter(cb => cb !== callback);
+    unsubscribe(events: string | string[], callback: Callback) {
+        const eventList = Array.isArray(events) ? events : [events];
+
+        eventList.forEach((event) => {
+            if (!this.events[event]) return;
+            this.events[event] = this.events[event].filter(cb => cb !== callback);
+        });
     }
 
-    publish(event: string, data?: any) {
-        if (!this.events[event]) return;
-        this.events[event].forEach(callback => callback(data));
+    publish(events: string | string[], data?: any) {
+        const eventList = Array.isArray(events) ? events : [events];
+
+        eventList.forEach((event) => {
+            if (!this.events[event]) return;
+            this.events[event].forEach(callback => callback(data));
+        });
     }
 }
 

@@ -1,5 +1,5 @@
-import { eventBus } from "./EventBus";
-import { Messages } from "../models/messages";
+import {eventBus} from "./EventBus";
+import {Messages} from "../models/messages";
 
 export const formValidationHandler = () => {
     const validateForm = (
@@ -7,18 +7,33 @@ export const formValidationHandler = () => {
         to: string,
         departureTime: Date | null
     ): boolean => {
-        if (!from || !to) {
-            eventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrts- und Zielort ausfüllen!");
+
+        if (!from && !to) {
+            eventBus.publish(Messages.FORM_ERROR, {field: "from", message: "Abfahrtsort fehlt"});
+            eventBus.publish(Messages.FORM_ERROR, {field: "to", message: "Zielort fehlt"});
+            return false;
+        }
+
+        if (!from) {
+            eventBus.publish(Messages.FORM_ERROR, {field: "from", message: "Abfahrtsort fehlt"});
+            return false;
+        }
+
+        if (!to) {
+            eventBus.publish(Messages.FORM_ERROR, {field: "to", message: "Zielort fehlt"});
             return false;
         }
 
         if (!departureTime) {
-            eventBus.publish(Messages.FORM_ERROR, "Bitte Abfahrtszeit angeben!");
+            eventBus.publish(Messages.FORM_ERROR, {
+                field: "deaprtureTime",
+                message: "Bitte Abfahrtszeit angeben!"
+            });
             return false;
         }
 
         return true;
     };
 
-    return { validateForm };
+    return {validateForm};
 };
