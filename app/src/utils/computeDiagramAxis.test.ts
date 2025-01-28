@@ -28,7 +28,7 @@ describe("computeDurationAxis", () => {
         expect(computeDurationAxis(HOUR + 45 * MINUTE)).toBe("2h");
     });
 
-    it("should round with 5min precision for values {x | 1min < x < 1h}", () => {
+    it("should round with 5min precision for values {x | x < 1h}", () => {
         expect(computeDurationAxis(1 * MINUTE)).toBe("0min");
         expect(computeDurationAxis(2 * MINUTE)).toBe("0min");
         expect(computeDurationAxis(3 * MINUTE)).toBe("5min");
@@ -40,3 +40,30 @@ describe("computeDurationAxis", () => {
 });
 
 
+const KM = 1000;
+
+describe("computeDistanceAxis", () => {
+
+    it("should round with 50km precision for values {x | x > 100km}", () => {
+        expect(computeDistanceAxis(124 * KM)).toBe("100km");
+        expect(computeDistanceAxis(125 * KM)).toBe("150km");
+        expect(computeDistanceAxis(174 * KM)).toBe("150km");
+        expect(computeDistanceAxis(175 * KM)).toBe("200km");
+    });
+
+    it("should round with 0.5km precision for values {x | 1km < x < 100km}", () => {
+        expect(computeDistanceAxis(1.24 * KM)).toBe("1km");
+        expect(computeDistanceAxis(1.25 * KM)).toBe("1.5km");
+        expect(computeDistanceAxis(99.74 * KM)).toBe("99.5km");
+        expect(computeDistanceAxis(99.75 * KM)).toBe("100km");
+    });
+
+    it("should round on 50m precision for values {x | x < 975m}", () => {
+        expect(computeDistanceAxis(24)).toBe("0m");
+        expect(computeDistanceAxis(25)).toBe("50m");
+        expect(computeDistanceAxis(74)).toBe("50m");
+        expect(computeDistanceAxis(75)).toBe("100m");
+        expect(computeDistanceAxis(974)).toBe("950m");
+        expect(computeDistanceAxis(975)).toBe("1km");
+    });
+});

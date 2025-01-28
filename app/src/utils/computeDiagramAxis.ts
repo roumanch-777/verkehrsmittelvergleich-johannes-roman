@@ -31,10 +31,11 @@ export const computeDistanceAxis = (value: number | string) => {
     if (value > (100 * KM)) {
         // round on 50 km precision: round the 50th of the value, then multiply by 50
         return `${Math.round(value / (1000 * 50)) * 50}km`;
-    } else if (value > KM) {
+    } else if (value >= 975) {
         // round on 0.5 km precision: round the double of the value, then divide by 2
         return `${Math.round((value / 1000) * 2) / 2}km`;
     } else {
-        return `${value} m`;
+        // round on 50 m precision: round the 50th of the value, then multiply by 50
+        return `${Math.round(value / 50) * 50}m`;
     }
 }
