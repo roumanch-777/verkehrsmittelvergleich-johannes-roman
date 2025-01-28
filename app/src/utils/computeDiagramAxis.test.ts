@@ -29,18 +29,12 @@ describe('computeDurationAxis', () => {
     });
 
     it('should round with 5min precision for values {x | 1min < x < 1h}', () => {
-        expect(computeDurationAxis(5 * MINUTE)).toBe("5min");
-        expect(computeDurationAxis(10 * MINUTE)).toBe("10min");
-        expect(computeDurationAxis(15 * MINUTE)).toBe("15min");
-        expect(computeDurationAxis(20 * MINUTE)).toBe("20min");
-        expect(computeDurationAxis(25 * MINUTE)).toBe("25min");
-        expect(computeDurationAxis(30 * MINUTE)).toBe("30min");
-        expect(computeDurationAxis(35 * MINUTE)).toBe("35min");
-        expect(computeDurationAxis(40 * MINUTE)).toBe("40min");
-        expect(computeDurationAxis(45 * MINUTE)).toBe("45min");
-        expect(computeDurationAxis(50 * MINUTE)).toBe("50min");
-        expect(computeDurationAxis(55 * MINUTE)).toBe("55min");
-        expect(computeDurationAxis(59 * MINUTE)).toBe("55min");
+        expect(computeDurationAxis(2 * MINUTE)).toBe("0min");
+        expect(computeDurationAxis(3 * MINUTE)).toBe("5min");
+        expect(computeDurationAxis(7 * MINUTE)).toBe("5min");
+        expect(computeDurationAxis(8 * MINUTE)).toBe("10min");
+        expect(computeDurationAxis(57 * MINUTE)).toBe("55min");
+        expect(computeDurationAxis(58 * MINUTE)).toBe("1h");
     });
 });
 
