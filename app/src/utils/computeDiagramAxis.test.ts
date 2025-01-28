@@ -6,29 +6,41 @@ const DAY = 24 * HOUR;
 
 describe('computeDurationAxis', () => {
 
-    it('should round with 0.5 day precision for values >= 1 day', () => {
-        expect(computeDurationAxis(DAY + HOUR)).toBe("1 d");
-        expect(computeDurationAxis(DAY + 5 * HOUR)).toBe("1 d");
-        expect(computeDurationAxis(DAY + 6 * HOUR)).toBe("1.5 d");
-        expect(computeDurationAxis(DAY + 17 * HOUR)).toBe("1.5 d");
-        expect(computeDurationAxis(DAY + 18 * HOUR)).toBe("2 d");
-        expect(computeDurationAxis(DAY + 23 * HOUR)).toBe("2 d");
+    it('should round with 0.5 day precision for values {x | x >= 1d}', () => {
+        expect(computeDurationAxis(DAY + HOUR)).toBe("1d");
+        expect(computeDurationAxis(DAY + 5 * HOUR)).toBe("1d");
+        expect(computeDurationAxis(DAY + 6 * HOUR)).toBe("1.5d");
+        expect(computeDurationAxis(DAY + 17 * HOUR)).toBe("1.5d");
+        expect(computeDurationAxis(DAY + 18 * HOUR)).toBe("2d");
+        expect(computeDurationAxis(DAY + 23 * HOUR)).toBe("2d");
     });
 
-    it('should return duration in hours for values > 10h', () => {
-        expect(computeDurationAxis(72000)).toBe("20 h");
+    it('should round with 1h precision for values {x | 10h < x < 1d}', () => {
+        expect(computeDurationAxis(10 * HOUR + 29 * MINUTE)).toBe("10h");
+        expect(computeDurationAxis(10 * HOUR + 30 * MINUTE)).toBe("11h");
+        expect(computeDurationAxis(23 * HOUR + 30 * MINUTE)).toBe("1d");
     });
 
-    it('should return duration in half hours for values greater than 3600 seconds', () => {
-        expect(computeDurationAxis(5400)).toBe("1.5 h");
+    it('should round with 0.5h precision for values {x | 1h < x < 10h}', () => {
+        expect(computeDurationAxis(HOUR + 14 * MINUTE)).toBe("1h");
+        expect(computeDurationAxis(HOUR + 15 * MINUTE)).toBe("1.5h");
+        expect(computeDurationAxis(HOUR + 44 * MINUTE)).toBe("1.5h");
+        expect(computeDurationAxis(HOUR + 45 * MINUTE)).toBe("2h");
     });
 
-    it('should return duration in minutes for values greater than 60 seconds', () => {
-        expect(computeDurationAxis(300)).toBe("5 min");
-    });
-
-    it('should return "0 min" for values less than or equal to 60 seconds', () => {
-        expect(computeDurationAxis(30)).toBe("0 min");
+    it('should round with 5min precision for values {x | 1min < x < 1h}', () => {
+        expect(computeDurationAxis(5 * MINUTE)).toBe("5min");
+        expect(computeDurationAxis(10 * MINUTE)).toBe("10min");
+        expect(computeDurationAxis(15 * MINUTE)).toBe("15min");
+        expect(computeDurationAxis(20 * MINUTE)).toBe("20min");
+        expect(computeDurationAxis(25 * MINUTE)).toBe("25min");
+        expect(computeDurationAxis(30 * MINUTE)).toBe("30min");
+        expect(computeDurationAxis(35 * MINUTE)).toBe("35min");
+        expect(computeDurationAxis(40 * MINUTE)).toBe("40min");
+        expect(computeDurationAxis(45 * MINUTE)).toBe("45min");
+        expect(computeDurationAxis(50 * MINUTE)).toBe("50min");
+        expect(computeDurationAxis(55 * MINUTE)).toBe("55min");
+        expect(computeDurationAxis(59 * MINUTE)).toBe("55min");
     });
 });
 
