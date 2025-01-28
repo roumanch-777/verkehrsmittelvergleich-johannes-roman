@@ -49,15 +49,18 @@ export function computeTimeString(secondsTotal: number): string {
     let days;
 
     if (secondsTotal < MINUTE) {
+        // < 1min -> return seconds unchanged
         return `${secondsTotal}s`;
     }
 
-    if (secondsTotal < (HOUR - 30)) {  // < 59 min 30 s
+    if (secondsTotal < (HOUR - 30)) {
+        // < 59.5min -> return rounded minutes
         minutes = Math.round(secondsTotal / 60);
         return `${minutes}min`;
     }
 
-    if (secondsTotal < (DAY - 30)) {  // < 23 h 59 min 30 s
+    if (secondsTotal < (DAY - 30)) {
+        // < 23h 59.5min -> return hours and rounded minutes
         hours = Math.floor(secondsTotal / HOUR);
         minutes = Math.round((secondsTotal % HOUR) / 60);
         if (minutes < MINUTE) {
@@ -67,10 +70,12 @@ export function computeTimeString(secondsTotal: number): string {
         }
     }
 
+    // from 23h 59.5min on: round up to 1d
     if (secondsTotal >= (DAY - 30) && secondsTotal < DAY) {
         return `1d 0h 0min`
     }
 
+    // return days, hours and rounded minutes
     days = Math.floor(secondsTotal / DAY);
     hours = Math.floor((secondsTotal % DAY) / HOUR);
     minutes = Math.round((secondsTotal % HOUR) / 60);
