@@ -1,4 +1,4 @@
-import { AllTravelData } from "../models/apiModels";
+import { AllTravelData } from "../../models/apiModels";
 
 
 const meansToTitle: Record<string, string> = {

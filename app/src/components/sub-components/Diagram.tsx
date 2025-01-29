@@ -1,7 +1,7 @@
 import { Bar } from 'react-chartjs-2';
-import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
-import { AllTravelDataUnformatted } from '../models/apiModels';
-import { computeDistanceAxis, computeDurationAxis } from '../utils/computeDiagramAxis';
+import { computeTimeString, computeDistanceString } from "../../utils/stringFormatters";
+import { AllTravelDataUnformatted } from '../../models/apiModels';
+import { computeDistanceAxis, computeDurationAxis } from '../../utils/computeDiagramAxis';
 
 
 export enum LabelType {
