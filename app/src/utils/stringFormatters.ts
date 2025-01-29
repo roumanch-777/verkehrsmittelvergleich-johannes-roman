@@ -10,7 +10,7 @@ export function computeDistanceString(metersTotal: number): string {
 
     // 0-999 m -> show meters
     if (metersTotal < 1000) {
-        return `${metersTotal}m`;
+        return `${metersTotal} m`;
     }
 
     // 1-100 km -> show kilometers with 1 decimal
@@ -19,18 +19,18 @@ export function computeDistanceString(metersTotal: number): string {
         meters = metersTotal % 1000;
         let decimal = Math.round(meters / 100);
         if (decimal === 0) {
-            return `${kilometers}km`
+            return `${kilometers} km`
         } else if (decimal === 10) {
-            return `${kilometers + 1}km`
+            return `${kilometers + 1} km`
         } else {
-            return `${kilometers}.${decimal}km`
+            return `${kilometers}.${decimal} km`
         }
     }
 
     // 100-10'000 km -> show kilometers without decimals
     if (metersTotal > 100_000 && metersTotal < 9_999_500) {
         kilometers = Math.round(metersTotal / 1000);
-        return `${kilometers}km`;
+        return `${kilometers} km`;
     }
 
     // > 10'000 km -> show with thousands separator
@@ -39,7 +39,7 @@ export function computeDistanceString(metersTotal: number): string {
     if (km === "1000") {
         km = "000";
     }
-    return `${megameters}'${km}km`
+    return `${megameters}'${km} km`
 }
 
 
@@ -50,13 +50,13 @@ export function computeTimeString(secondsTotal: number): string {
 
     if (secondsTotal < MINUTE) {
         // < 1min -> return seconds unchanged
-        return `${secondsTotal}s`;
+        return `${secondsTotal} s`;
     }
 
     if (secondsTotal < (HOUR - 30)) {
         // < 59.5min -> return rounded minutes
         minutes = Math.round(secondsTotal / 60);
-        return `${minutes}min`;
+        return `${minutes} min`;
     }
 
     if (secondsTotal < (DAY - 30)) {

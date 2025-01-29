@@ -98,7 +98,7 @@ interface DiagramDataProps {
 
 
 export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, label }) => {
-    if (!allTravelDataUnformatted) {
+    if (!allTravelDataUnformatted || Object.values(allTravelDataUnformatted).every(value => value === undefined)) {
         return null;
     }
     const labelStr = label === LabelType.DURATION ? "Zeit" : "Distanz";

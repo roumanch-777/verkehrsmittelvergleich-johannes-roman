@@ -116,7 +116,7 @@ async function makeApiCall(
         headers: headers,
         body: JSON.stringify(payload)
     });
-    if (!response.ok) throw new Error();
+    if (!response.ok) return;
     const data = await response.json();
     if (data && "routes" in data && data["routes"].length > 0) {
         console.log(`Received a route for mode ${mode.valueOf()} (from '${from}' to '${to}')`);

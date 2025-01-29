@@ -29,7 +29,7 @@ export function Formular() {
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "1000px", margin: "auto" }}>
+        <div className="MainContainer">
             <InputField label="Abfahrtsort" value={from} onChange={setFrom} fieldName="from" />
             <DatePicker label="Abfahrtszeit" value={departureTime} onChange={setDepartureTime} />
             <InputField label="Zielort" value={to} onChange={setTo} fieldName="to" />
