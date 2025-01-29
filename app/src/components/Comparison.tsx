@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
-import {ComparisonTable} from "./sub-components/ComparisonTable";
-import {Diagram, LabelType} from "./sub-components/Diagram";
-import {AllTravelData, AllTravelDataUnformatted} from "../models/apiModels";
-import {eventBus} from "../utils/EventBus";
-import {Messages} from "../models/messages";
+import React, { useEffect, useState } from "react";
+import { ComparisonTable } from "./sub-components/ComparisonTable";
+import { Diagram, LabelType } from "./sub-components/Diagram";
+import { AllTravelData, AllTravelDataUnformatted } from "../models/apiModels";
+import { eventBus } from "../utils/EventBus";
+import { Messages } from "../models/messages";
 
 export function Comparison() {
 
@@ -25,10 +25,10 @@ export function Comparison() {
     }, []);
 
     return (
-        <div style={{display: "flex", flexDirection: "column", gap: "16px", width: "1000px", margin: "auto"}}>
-            <ComparisonTable allTravelData={allTravelData}/>
-            <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DURATION}/>
-            <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DISTANCE}/>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "1000px", margin: "auto" }}>
+            <ComparisonTable allTravelData={allTravelData} />
+            <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DURATION} />
+            <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DISTANCE} />
         </div>
     )
 }
