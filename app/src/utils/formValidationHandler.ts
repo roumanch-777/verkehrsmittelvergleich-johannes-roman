@@ -25,7 +25,7 @@ export const formValidationHandler = () => {
 
         if (!departureTime) {
             eventBus.publish(Messages.FORM_ERROR, {
-                field: "deaprtureTime",
+                field: "departureTime",
                 message: "Bitte Abfahrtszeit angeben!"
             });
             return false;
