@@ -12,6 +12,7 @@ import { eventBus } from "./utils/EventBus";
 import { Messages } from "./models/messages";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title as ChartTitle, Tooltip } from 'chart.js';
 import { Diagram, LabelType } from './components/Diagram';
+import './App.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip);
 

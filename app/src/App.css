@@ -1,0 +1,16 @@
+/* Base styling for all elements */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* TableHeader class: Bold text */
+.TableHeader {
+    font-weight: bold;
+    text-align: left;
+}
+
+/* TableCell class: Regular text (inherits the base styling) */
+.TableCell {
+    font-weight: normal;
+}
