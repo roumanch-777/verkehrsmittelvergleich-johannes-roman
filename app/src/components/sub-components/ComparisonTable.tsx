@@ -25,9 +25,9 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData 
         <table>
             <thead>
                 <tr>
-                    <th>Verkehrsmittel</th>
-                    <th>Distanz</th>
-                    <th>Zeit</th>
+                    <th className="TableHeader">Verkehrsmittel</th>
+                    <th className="TableHeader">Distanz</th>
+                    <th className="TableHeader">Zeit</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,9 +36,9 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData 
                         return null
                     } else {
                         return <tr key={means}>
-                            <td>{meansToTitle[means]}</td>
-                            <td>{allValues[index].formattedDistance}</td>
-                            <td>{allValues[index].formattedTime}</td>
+                            <td className="TableCell">{meansToTitle[means]}</td>
+                            <td className="TableCell">{allValues[index].formattedDistance}</td>
+                            <td className="TableCell">{allValues[index].formattedTime}</td>
                         </tr>
                     }
                 })}
