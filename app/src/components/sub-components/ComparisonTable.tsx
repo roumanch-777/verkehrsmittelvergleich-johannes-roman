@@ -1,12 +1,12 @@
-import { AllTravelData } from "../models/apiModels";
+import { AllTravelData } from "../../models/apiModels";
 
 
 const meansToTitle: Record<string, string> = {
-    drive: "🚗 Auto",
-    bicycle: "🚴 Fahrrad",
-    walk: "🚶‍♂️ Zu Fuss",
-    twoWheeler: "🏍 Motorrad",
-    transit: "🚆 Öffentliche Verkehrsmittel",
+    drive: "Auto",
+    bicycle: "Fahrrad",
+    walk: "Zu Fuss",
+    TwoWheeler: "Motorrad",
+    transit: "Öffentliche Verkehrsmittel",
 }
 
 
@@ -25,9 +25,9 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData 
         <table>
             <thead>
                 <tr>
-                    <th className="TableHeader">Verkehrsmittel</th>
-                    <th className="TableHeader">Distanz</th>
-                    <th className="TableHeader">Zeit</th>
+                    <th>Verkehrsmittel</th>
+                    <th>Distanz</th>
+                    <th>Zeit</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,9 +36,9 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData 
                         return null
                     } else {
                         return <tr key={means}>
-                            <td className="TableCell">{meansToTitle[means]}</td>
-                            <td className="TableCell">{allValues[index].formattedDistance}</td>
-                            <td className="TableCell">{allValues[index].formattedTime}</td>
+                            <td>{meansToTitle[means]}</td>
+                            <td>{allValues[index].formattedDistance}</td>
+                            <td>{allValues[index].formattedTime}</td>
                         </tr>
                     }
                 })}
