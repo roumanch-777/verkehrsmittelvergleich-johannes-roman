@@ -2,11 +2,11 @@ import { AllTravelData } from "../models/apiModels";
 
 
 const meansToTitle: Record<string, string> = {
-    drive: "Auto",
-    bicycle: "Fahrrad",
-    walk: "Zu Fuss",
-    twoWheeler: "Motorrad",
-    transit: "Öffentliche Verkehrsmittel",
+    drive: "🚗 Auto",
+    bicycle: "🚴 Fahrrad",
+    walk: "🚶‍♂️ Zu Fuss",
+    twoWheeler: "🏍 Motorrad",
+    transit: "🚆 Öffentliche Verkehrsmittel",
 }
 
 

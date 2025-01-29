@@ -20,11 +20,11 @@ interface LabeledDiagramDataProps {
 
 
 const labelMapper: Map<string, string> = new Map([
-    ["drive", "Auto"],
-    ["bicycle", "Velo"],
-    ["walk", "Zu Fuss"],
-    ["twoWheeler", "Motorrad"],
-    ["transit", "ÖV"],
+    ["drive", "🚗 Auto"],
+    ["bicycle", "🚴 Velo"],
+    ["walk", "🚶‍♂️ Zu Fuss"],
+    ["twoWheeler", "🏍 Motorrad"],
+    ["transit", "🚆 ÖV"],
 ]);
 
 
