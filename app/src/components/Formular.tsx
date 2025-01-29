@@ -1,0 +1,43 @@
+import React, {useState} from "react";
+import {InputField} from "./sub-components/InputField";
+import {DatePicker} from "./sub-components/DatePicker";
+import {MUIButton} from "./sub-components/MUIButton";
+import {formValidationHandler} from "../utils/formValidationHandler";
+import {eventBus} from "../utils/EventBus";
+import {Messages} from "../models/messages";
+import {getAllTravelData} from "../utils/googleMapsAPI";
+
+
+export function Formular() {
+    const [from, setFrom] = useState("");
+    const [to, setTo] = useState("");
+    const [departureTime, setDepartureTime] = useState<Date | null>(new Date());
+    const {validateForm} = formValidationHandler();
+
+    //const [allTravelData, setAllTravelData] = useState<AllTravelData | null>(null);
+    //const [diagramData, setDiagramData] = useState<AllTravelDataUnformatted | null>(null);
+
+    const handleSubmit = () => {
+        const isValid = validateForm(from, to, departureTime);
+
+        if (!isValid) {
+            return;
+        }
+
+        const requestData = {from, to, departureTime};
+        console.log("Formulardaten erfolgreich veröffentlicht:", requestData);
+        eventBus.publish(Messages.FORM_SUBMITTED, "Einen Moment bitte, wir gehen bei Google nachfragen...");
+        //getAllTravelData(from, to, departureTime, setAllTravelData, setDiagramData);
+        getAllTravelData(from, to, departureTime);
+
+    };
+
+    return (
+        <div style={{display: "flex", flexDirection: "column", gap: "16px", width: "1000px", margin: "auto"}}>
+            <InputField label="Abfahrtsort" value={from} onChange={setFrom} fieldName="from"/>
+            <DatePicker label="Abfahrtszeit" value={departureTime} onChange={setDepartureTime}/>
+            <InputField label="Zielort" value={to} onChange={setTo} fieldName="to"/>
+            <MUIButton onClick={handleSubmit}>Absenden</MUIButton>
+        </div>
+    )
+}

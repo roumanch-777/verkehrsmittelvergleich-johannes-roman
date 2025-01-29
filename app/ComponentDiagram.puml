@@ -1,22 +1,32 @@
 @startuml
-left to right direction
 skinparam linetype polyline
 package "Frontend" {
     [App] --> [Title]
-    [App] --> [MessageDisplay] : "Zeigt Meldungen"
-    [App] --> [InputField] : "Abfahrtsort"
-    [App] --> [InputField] : "Zielort"
-    [App] --> [DatumPicker] : "Abfahrtszeit"
-    [App] --> [Button] : "Absenden"
-    [App] --> [ComparisonTable] : "Zeigt Reisemöglichkeiten"
+    [App] --> [MessageDisplay]
+    [App] --> [Formular]
+    [App] --> [Comparison]
+}
+
+component "Formular" {
+    [InputField Abfahrtsort]
+    [Datepicker]
+    [InputField Zielort]
+    [Button Absenden]
+}
+
+component "Comparison" {
+    [ComparisonTable]
+    [Diagram Duration]
+    [Diagram Distance]
 }
 
 package "Utils" {
     component "EventBus" {
     queue "Success Queue" as SuccessQueue
     queue "Error Queue" as ErrorQueue
+    queue "Travel Data" as TravelData
+    queue "Diagram Data" as DiagramData
 }
-
 
     [App] --> SuccessQueue : "Publiziert Success"
     [formValidationHandler] --> ErrorQueue : "Publiziert Error"
@@ -27,6 +37,11 @@ package "Utils" {
 
 package "API" {
     [google-maps-routes-api]
-    [App] <--> [google-maps-routes-api] : "Holt Reisedaten"
+    [Formular] --> [google-maps-routes-api] : "Bestellt Reisedaten"
+    [google-maps-routes-api] --> [TravelData] : "Publiziert Travel Data"
+    [google-maps-routes-api] --> [DiagramData] : "Publiziert Diagram Data"
 }
+
+[TravelData] --> [Comparison] : "konsumiert Travel Data"
+[DiagramData] --> [Comparison] : "konsumiert Diagram Data"
 @enduml

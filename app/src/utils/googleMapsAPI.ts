@@ -1,16 +1,10 @@
-import { 
-    AllTravelData, 
-    AllTravelDataUnformatted, 
-    ApiResponse, 
-    FormattedTravelData, 
-    Payload, 
-    RawTravelData, 
-    TravelMode 
-} from "../models/apiModels";
-import { computeTimeString, computeDistanceString } from "./stringFormatters";
+import {ApiResponse, FormattedTravelData, Payload, RawTravelData, TravelMode} from "../models/apiModels";
+import {computeDistanceString, computeTimeString} from "./stringFormatters";
+import {eventBus} from "./EventBus";
+import {Messages} from "../models/messages";
 
 
-const USE_REAL_API = false;
+const USE_REAL_API = true;
 const API_KEY = ensureString(process.env.REACT_APP_API_KEY);
 
 
@@ -29,22 +23,37 @@ export async function getAllTravelData(
     from: string,
     to: string,
     departureTime: Date | null,
-    setAllTravelData: (data: AllTravelData) => void,
-    setDiagramData: (data: AllTravelDataUnformatted) => void,
+    //setAllTravelData: (data: AllTravelData) => void,
+    //setDiagramData: (data: AllTravelDataUnformatted) => void,
 ): Promise<void> {
     const [drive, driveRaw] = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
     const [bicycle, bicycleRaw] = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
     const [walk, walkRaw] = await getTravelData(from, to, departureTime, TravelMode.WALK);
     const [twoWheeler, twoWheelerRaw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const [transit, transitRaw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
-    setAllTravelData({ drive, bicycle, walk, twoWheeler: twoWheeler, transit });
-    setDiagramData({ 
-        driveRaw: driveRaw, 
-        bicycleRaw: bicycleRaw, 
-        walkRaw: walkRaw, 
-        twoWheelerRaw: twoWheelerRaw, 
-        transitRaw: transitRaw 
-    });
+
+    const allTravelData =
+        {drive, bicycle, walk, twoWheeler: twoWheeler, transit}
+    const diagramData = {
+        driveRaw: driveRaw,
+        bicycleRaw: bicycleRaw,
+        walkRaw: walkRaw,
+        twoWheelerRaw: twoWheelerRaw,
+        transitRaw: transitRaw
+    }
+
+    eventBus.publish(Messages.TRAVELDATA_RECEIVED, allTravelData);
+    eventBus.publish(Messages.DIAGRAMDATA_RECEIVED, diagramData);
+
+    /*
+    setAllTravelData({drive, bicycle, walk, twoWheeler: twoWheeler, transit});
+    setDiagramData({
+        driveRaw: driveRaw,
+        bicycleRaw: bicycleRaw,
+        walkRaw: walkRaw,
+        twoWheelerRaw: twoWheelerRaw,
+        transitRaw: transitRaw
+    });*/
 }
 
 
@@ -60,14 +69,14 @@ async function getTravelData(
     }
     const formattedTime = computeTimeString(rawTravelData.durationSeconds);
     const formattedDistance = computeDistanceString(rawTravelData.distanceMeters);
-    return [{ formattedTime, formattedDistance }, rawTravelData];
+    return [{formattedTime, formattedDistance}, rawTravelData];
 }
 
 
 async function getRawData(
-    from: string, 
-    to: string, 
-    departureTime: Date | null, 
+    from: string,
+    to: string,
+    departureTime: Date | null,
     mode: TravelMode
 ): Promise<RawTravelData | undefined> {
     let raw: ApiResponse | undefined;
@@ -81,29 +90,31 @@ async function getRawData(
     }
     const distanceMeters = raw.distanceMeters;
     const durationSeconds = parseInt(raw.duration.replace(/s$/, ""));
-    return { distanceMeters, durationSeconds };
+    return {distanceMeters, durationSeconds};
 }
 
 
 async function makeApiCall(
-    from: string, 
-    to: string, 
-    departureTime: Date | null, 
+    from: string,
+    to: string,
+    departureTime: Date | null,
     mode: TravelMode
 ): Promise<ApiResponse | undefined> {
     const url = "https://routes.googleapis.com/directions/v2:computeRoutes"
     const payload: Payload = {
-        "origin": { "address": from },
-        "destination": { "address": to },
+        "origin": {"address": from},
+        "destination": {"address": to},
         "travelMode": mode,
         "languageCode": "de-CH",
     };
     if (departureTime && departureTime > new Date()) {
         payload["departureTime"] = departureTime.toISOString();
-    };
+    }
+
     if (mode !== TravelMode.WALK && mode !== TravelMode.BICYCLE && mode !== TravelMode.TRANSIT) {
         payload["routingPreference"] = "TRAFFIC_AWARE";
-    };
+    }
+
     const headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": API_KEY,

@@ -1,6 +1,6 @@
-import { Bar } from 'react-chartjs-2';
-import { computeTimeString, computeDistanceString } from "../utils/stringFormatters";
-import { AllTravelDataUnformatted } from '../models/apiModels';
+import {Bar} from 'react-chartjs-2';
+import {computeDistanceString, computeTimeString} from "../../utils/stringFormatters";
+import {AllTravelDataUnformatted} from '../../models/apiModels';
 
 
 const computeDurationAxis = (value: number | string) => {
@@ -89,10 +89,9 @@ const computeLabeledData = (
             throw new Error("Invalid label type: Label must be either DURATION or DISTANCE");
     }
     // Filter out fields with value `0`
-    const filteredResult = Object.fromEntries(
+    return Object.fromEntries(
         Object.entries(result).filter(([_, value]) => value !== 0)
     );
-    return filteredResult;
 }
 
 
@@ -130,7 +129,7 @@ interface DiagramDataProps {
 }
 
 
-export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, label }) => {
+export const Diagram: React.FC<DiagramDataProps> = ({allTravelDataUnformatted, label}) => {
     if (!allTravelDataUnformatted) {
         return null;
     }
@@ -149,7 +148,7 @@ export const Diagram: React.FC<DiagramDataProps> = ({ allTravelDataUnformatted, 
     const options = computeChartOptions(label);
     return (
         <div className="chart-container">
-            <h2 style={{ textAlign: "center" }}>{labelStr}</h2>
+            <h2 style={{textAlign: "center"}}>{labelStr}</h2>
             <Bar
                 data={formattedDiagramData}
                 options={options}
