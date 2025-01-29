@@ -25,7 +25,6 @@ Die Responses werden schön aufbereitet, sodass der User die Verkehrsmittel punk
 ## Requirements
 
 - Ein gültiger Google Routes API Key muss hinterlegt sein in `app/.env.local`, in der Form `REACT_APP_API_KEY=xyz`.
-- `app/src/utils/googleMapsAPI.ts`: `USE_REAL_API` muss manuell auf `true` gesetzt werden.
 - Führe folgende Befehle aus im Terminal: `cd app; npm start`
 - Navigiere in einem Browser zu <http://localhost:3000/>
 
