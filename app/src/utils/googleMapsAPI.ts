@@ -37,7 +37,7 @@ export async function getAllTravelData(
     const [walk, walkRaw] = await getTravelData(from, to, departureTime, TravelMode.WALK);
     const [twoWheeler, twoWheelerRaw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const [transit, transitRaw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
-    setAllTravelData({ drive, bicycle, walk, twoWheeler: twoWheeler, transit });
+    setAllTravelData({ drive, bicycle, walk, twoWheeler, transit });
     setDiagramData({ 
         driveRaw: driveRaw, 
         bicycleRaw: bicycleRaw, 
