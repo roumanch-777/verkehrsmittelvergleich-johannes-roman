@@ -13,7 +13,7 @@ export function Comparison() {
     useEffect(() => {
 
         const handleTravelDataReceived = (data: any) => {
-            setAllTravelData(data.normal);
+            setAllTravelData(data.formatted);
             setDiagramData(data.raw);
         };
 

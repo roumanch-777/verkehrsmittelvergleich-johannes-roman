@@ -30,7 +30,7 @@ export async function getAllTravelData(
     const [twoWheeler, twoWheelerRaw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const [transit, transitRaw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     const allTravelData = {
-        normal: { drive, bicycle, walk, twoWheeler, transit },
+        formatted: { drive, bicycle, walk, twoWheeler, transit },
         raw: { driveRaw, bicycleRaw, walkRaw, twoWheelerRaw, transitRaw },
     };
     eventBus.publish(Messages.TRAVELDATA_RECEIVED, allTravelData);
