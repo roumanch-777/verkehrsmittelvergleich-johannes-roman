@@ -91,11 +91,9 @@ async function makeApiCall(
     if (departureTime && departureTime > new Date()) {
         payload["departureTime"] = departureTime.toISOString();
     }
-
     if (mode !== TravelMode.WALK && mode !== TravelMode.BICYCLE && mode !== TravelMode.TRANSIT) {
         payload["routingPreference"] = "TRAFFIC_AWARE";
     }
-
     const headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": API_KEY,
