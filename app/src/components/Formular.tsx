@@ -14,9 +14,6 @@ export function Formular() {
     const [departureTime, setDepartureTime] = useState<Date | null>(new Date());
     const { validateForm } = formValidationHandler();
 
-    //const [allTravelData, setAllTravelData] = useState<AllTravelData | null>(null);
-    //const [diagramData, setDiagramData] = useState<AllTravelDataUnformatted | null>(null);
-
     const handleSubmit = () => {
         const isValid = validateForm(from, to, departureTime);
 
@@ -27,7 +24,6 @@ export function Formular() {
         const requestData = { from, to, departureTime };
         console.log("Formulardaten erfolgreich veröffentlicht:", requestData);
         eventBus.publish(Messages.FORM_SUBMITTED, "Einen Moment bitte, wir gehen bei Google nachfragen...");
-        //getAllTravelData(from, to, departureTime, setAllTravelData, setDiagramData);
         getAllTravelData(from, to, departureTime);
 
     };
