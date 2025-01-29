@@ -25,13 +25,25 @@ export async function getAllTravelData(
     departureTime: Date | null,
 ): Promise<void> {
     const [drive, driveRaw] = await getTravelData(from, to, departureTime, TravelMode.DRIVE);
+    const [transit, transitRaw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
+    const [twoWheeler, twoWheelerRaw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
     const [bicycle, bicycleRaw] = await getTravelData(from, to, departureTime, TravelMode.BICYCLE);
     const [walk, walkRaw] = await getTravelData(from, to, departureTime, TravelMode.WALK);
-    const [twoWheeler, twoWheelerRaw] = await getTravelData(from, to, departureTime, TravelMode.TWO_WHEELER);
-    const [transit, transitRaw] = await getTravelData(from, to, departureTime, TravelMode.TRANSIT);
     const allTravelData = {
-        formatted: { drive, bicycle, walk, twoWheeler, transit },
-        raw: { driveRaw, bicycleRaw, walkRaw, twoWheelerRaw, transitRaw },
+        formatted: { 
+            drive: drive, 
+            transit: transit, 
+            twoWheeler: twoWheeler, 
+            bicycle: bicycle, 
+            walk: walk, 
+        },
+        raw: { 
+            driveRaw: driveRaw, 
+            transitRaw: transitRaw, 
+            twoWheelerRaw: twoWheelerRaw, 
+            bicycleRaw: bicycleRaw, 
+            walkRaw: walkRaw,
+        },
     };
     eventBus.publish(Messages.TRAVELDATA_RECEIVED, allTravelData);
 

@@ -12,19 +12,19 @@ export enum LabelType {
 
 interface LabeledDiagramDataProps {
     drive?: number
+    transit?: number
+    twoWheeler?: number
     bicycle?: number
     walk?: number
-    twoWheeler?: number
-    transit?: number
 }
 
 
 const labelMapper: Map<string, string> = new Map([
     ["drive", "🚗 Auto"],
+    ["transit", "🚆 ÖV"],
+    ["twoWheeler", "🏍 Motorrad"],
     ["bicycle", "🚴 Velo"],
     ["walk", "🚶‍♂️ Zu Fuss"],
-    ["twoWheeler", "🏍 Motorrad"],
-    ["transit", "🚆 ÖV"],
 ]);
 
 
@@ -37,19 +37,19 @@ const computeLabeledData = (
         case LabelType.DURATION:
             result = {
                 drive: allTravelDataUnformatted.driveRaw?.durationSeconds || 0,
+                transit: allTravelDataUnformatted.transitRaw?.durationSeconds || 0,
+                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.durationSeconds || 0,
                 bicycle: allTravelDataUnformatted.bicycleRaw?.durationSeconds || 0,
                 walk: allTravelDataUnformatted.walkRaw?.durationSeconds || 0,
-                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.durationSeconds || 0,
-                transit: allTravelDataUnformatted.transitRaw?.durationSeconds || 0,
             };
             break;
         case LabelType.DISTANCE:
             result = {
                 drive: allTravelDataUnformatted.driveRaw?.distanceMeters || 0,
+                transit: allTravelDataUnformatted.transitRaw?.distanceMeters || 0,
+                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.distanceMeters || 0,
                 bicycle: allTravelDataUnformatted.bicycleRaw?.distanceMeters || 0,
                 walk: allTravelDataUnformatted.walkRaw?.distanceMeters || 0,
-                twoWheeler: allTravelDataUnformatted.twoWheelerRaw?.distanceMeters || 0,
-                transit: allTravelDataUnformatted.transitRaw?.distanceMeters || 0,
             };
             break;
         default:

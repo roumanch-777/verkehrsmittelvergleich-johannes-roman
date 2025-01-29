@@ -1,9 +1,9 @@
 export enum TravelMode {
     DRIVE = "DRIVE",
+    TRANSIT = "TRANSIT",
+    TWO_WHEELER = "TWO_WHEELER",
     BICYCLE = "BICYCLE",
     WALK = "WALK",
-    TWO_WHEELER = "TWO_WHEELER",
-    TRANSIT = "TRANSIT",
 }
 
 
@@ -21,19 +21,19 @@ export interface FormattedTravelData {
 
 export interface AllTravelData {
     drive: FormattedTravelData | undefined
+    transit: FormattedTravelData | undefined
+    twoWheeler: FormattedTravelData | undefined
     bicycle: FormattedTravelData | undefined
     walk: FormattedTravelData | undefined
-    twoWheeler: FormattedTravelData | undefined
-    transit: FormattedTravelData | undefined
 }
 
 
 export interface AllTravelDataUnformatted {
     driveRaw: RawTravelData | undefined
+    transitRaw: RawTravelData | undefined
+    twoWheelerRaw: RawTravelData | undefined
     bicycleRaw: RawTravelData | undefined
     walkRaw: RawTravelData | undefined
-    twoWheelerRaw: RawTravelData | undefined
-    transitRaw: RawTravelData | undefined
 }
 
 
