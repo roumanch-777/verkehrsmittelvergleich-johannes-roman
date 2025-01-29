@@ -1,4 +1,4 @@
-@startuml
+@startuml ComponentDiagram
 left to right direction
 skinparam linetype polyline
 package "Frontend" {
@@ -6,7 +6,7 @@ package "Frontend" {
     [App] --> [MessageDisplay] : "Zeigt Meldungen"
     [App] --> [InputField] : "Abfahrtsort"
     [App] --> [InputField] : "Zielort"
-    [App] --> [DatumPicker] : "Abfahrtszeit"
+    [App] --> [DatePicker] : "Abfahrtszeit"
     [App] --> [Button] : "Absenden"
     [App] --> [ComparisonTable] : "Zeigt Reisemöglichkeiten"
 }
@@ -26,7 +26,7 @@ package "Utils" {
 }
 
 package "API" {
-    [google-maps-routes-api]
-    [App] <--> [google-maps-routes-api] : "Holt Reisedaten"
+    [googleMapsAPI]
+    [App] <--> [googleMapsAPI] : "Holt Reisedaten"
 }
 @enduml
