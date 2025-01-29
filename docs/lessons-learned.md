@@ -4,10 +4,7 @@
 
 Wir hatten zuvor beide keine Erfahrung in Webentwicklung, 
 deshalb benötigten wir anfangs viel Zeit, um uns vertraut zu machen 
-mit den Basics von Javascript, Typescript, Node, und React.
-
-Einerseits finde ich es ein wenig schade, dass unser Produkt nun eher dürftig ausgefallen ist, 
-andererseits war es für mich eine sehr wertvolle Erfahrung, bei der ich extrem viel gelernt habe.
+mit den Basics von Javascript, Typescript, Node, React, JSX/TSX und CSS.
 
 ## Asynchrone Callbacks (Johannes)
 
@@ -33,18 +30,19 @@ async function getTravelData(
 }
 ```
 
-Dieses Pattern ist sehr ungewohnt für mich, aber ich finde es faszinierend.
+Dieses Pattern ist sehr ungewohnt für mich, aber ich finde es interessant.
 
 ## Optionale Werte (Johannes)
 
 Die Google Routes API gibt nicht immer für jedes Verkehrsmittel eine Antwort.
-Beispielsweise für das Motorrad wird beinahe nie etwas zurückgegeben.
+Beispielsweise für das Motorrad wird fast nie etwas zurückgegeben.
 Deshalb müssen alle Komponenten mit einem optionalen Wert umgehen können.
 
 ## Formatierung und Rundung der Rohdaten (Johannes)
 
 Als überraschend komplex hat sich die Umrechnung der Rohdaten herausgestellt.
-Die Distanzen und Zeiten werden in Metern/Sekunden zurückgegeben. 
+Die Distanzen und Zeiten werden in Metern/Sekunden zurückgegeben,
+also mussten wir z.B. 19990s umrechnen zu 5h 33min 10s, und dann runden auf 5h 35min.
 
 Wir mussten mit einem breiten Spektrum an Zeitmassen umgehen, 
 von wenigen Sekunden bis zu einigen Tagen, und immer sinnvoll runden.
@@ -77,3 +75,8 @@ describe("computeDurationAxis", () => {
     });
 });
 ```
+
+## Schlussgedanke (Johannes)
+
+Einerseits finde ich es ein wenig schade, dass unser Produkt nun eher dürftig ausgefallen ist, 
+andererseits war es für mich eine sehr wertvolle Erfahrung, bei der ich sehr viel gelernt habe.
