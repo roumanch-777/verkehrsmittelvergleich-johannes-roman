@@ -4,13 +4,18 @@ body {
     color: #333;
 }
 
-/* TableHeader class: Bold text */
 .TableHeader {
     font-weight: bold;
     text-align: left;
 }
 
-/* TableCell class: Regular text (inherits the base styling) */
 .TableCell {
     font-weight: normal;
+}
+
+.NothingFound {
+    font-weight: bold;
+    color: #ff9100;
+    text-align: center;
+    padding-top: 50px;
 }

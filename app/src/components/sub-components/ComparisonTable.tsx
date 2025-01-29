@@ -16,7 +16,12 @@ interface ComparisonTableProps {
 
 
 export const ComparisonTable: React.FC<ComparisonTableProps> = ({ allTravelData }) => {
-    const nothingFound = <div>Für diesen Abfahrtsort und Zielort wurde leider keine Route gefunden.</div>;
+    const nothingFound = (
+        <div className="NothingFound">
+            🤷 Für diesen Abfahrtsort und Zielort wurde leider keine Route gefunden. <br/>
+            Wie wär's mit was anderem?
+        </div>
+    );
     if (!allTravelData || Object.values(allTravelData).every(value => value === undefined)) {
         return nothingFound;
     }
