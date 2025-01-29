@@ -3,38 +3,38 @@ import { computeDistanceString, computeTimeString, MINUTE, HOUR, DAY } from "./s
 
 describe("computeDistanceString", () => {
     it("should return 0-999m as-is", () => {
-        expect(computeDistanceString(0)).toBe("0m");
-        expect(computeDistanceString(999)).toBe("999m");
+        expect(computeDistanceString(0)).toBe("0 m");
+        expect(computeDistanceString(999)).toBe("999 m");
     });
     it("should round kilometers to 1 decimal, if 1-100 km", () => {
-        expect(computeDistanceString(1_049)).toBe("1km");
-        expect(computeDistanceString(1_050)).toBe("1.1km");
-        expect(computeDistanceString(1_949)).toBe("1.9km");
-        expect(computeDistanceString(1_950)).toBe("2km");
-        expect(computeDistanceString(10_049)).toBe("10km");
-        expect(computeDistanceString(10_050)).toBe("10.1km");
-        expect(computeDistanceString(99_950)).toBe("100km");
+        expect(computeDistanceString(1_049)).toBe("1 km");
+        expect(computeDistanceString(1_050)).toBe("1.1 km");
+        expect(computeDistanceString(1_949)).toBe("1.9 km");
+        expect(computeDistanceString(1_950)).toBe("2 km");
+        expect(computeDistanceString(10_049)).toBe("10 km");
+        expect(computeDistanceString(10_050)).toBe("10.1 km");
+        expect(computeDistanceString(99_950)).toBe("100 km");
     });
     it("should show kilometers without decimals, if 100-10'000 km", () => {
-        expect(computeDistanceString(9_999_499)).toBe("9999km");
+        expect(computeDistanceString(9_999_499)).toBe("9999 km");
     });
     it("should show kilometers with thousands separator, if > 10'000 km", () => {
-        expect(computeDistanceString(9_999_500)).toBe("10'000km");
-        expect(computeDistanceString(10_000_500)).toBe("10'001km");
+        expect(computeDistanceString(9_999_500)).toBe("10'000 km");
+        expect(computeDistanceString(10_000_500)).toBe("10'001 km");
     });
 });
 
 
 describe("computeTimeString", () => {
     it("should return seconds as-is, if < 1min", () => {
-        expect(computeTimeString(0)).toBe("0s");
-        expect(computeTimeString(58)).toBe("58s");
+        expect(computeTimeString(0)).toBe("0 s");
+        expect(computeTimeString(58)).toBe("58 s");
     });
     it("should round with 1 minute precision, if < 59 min 30 s", () => {
-        expect(computeTimeString(61)).toBe("1min");
-        expect(computeTimeString(130)).toBe("2min");
-        expect(computeTimeString((9 * MINUTE) + 20)).toBe("9min");
-        expect(computeTimeString((51 * MINUTE) + 40)).toBe("52min");
+        expect(computeTimeString(61)).toBe("1 min");
+        expect(computeTimeString(130)).toBe("2 min");
+        expect(computeTimeString((9 * MINUTE) + 20)).toBe("9 min");
+        expect(computeTimeString((51 * MINUTE) + 40)).toBe("52 min");
     });
     it("should return hours and rounded minutes, if < 23h 59.5min", () => {
         expect(computeTimeString((59 * MINUTE) + 40)).toBe("1h 0min");
