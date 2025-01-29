@@ -23,6 +23,14 @@ export const formValidationHandler = () => {
             return false;
         }
 
+        if (to.toLowerCase() == from.toLowerCase()) {
+            eventBus.publish(Messages.FORM_ERROR, {
+                field: "to",
+                message: "Abfahrts- und Zielort dürfen nicht identisch sein!"
+            });
+            return false;
+        }
+
         if (!departureTime) {
             eventBus.publish(Messages.FORM_ERROR, {
                 field: "departureTime",
