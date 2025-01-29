@@ -33,7 +33,7 @@ export function Formular() {
             <InputField label="Abfahrtsort" value={from} onChange={setFrom} fieldName="from" />
             <DatePicker label="Abfahrtszeit" value={departureTime} onChange={setDepartureTime} />
             <InputField label="Zielort" value={to} onChange={setTo} fieldName="to" />
-            <MUIButton onClick={handleSubmit}>Absenden</MUIButton>
+            <MUIButton onClick={handleSubmit}>Los geht's!</MUIButton>
         </div>
     )
 }
