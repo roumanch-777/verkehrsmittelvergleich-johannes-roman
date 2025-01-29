@@ -23,7 +23,7 @@ export const formValidationHandler = () => {
             return false;
         }
 
-        if (to.toLowerCase() == from.toLowerCase()) {
+        if (to.toLowerCase() === from.toLowerCase()) {
             eventBus.publish(Messages.FORM_ERROR, {
                 field: "to",
                 message: "Abfahrts- und Zielort dürfen nicht identisch sein!"

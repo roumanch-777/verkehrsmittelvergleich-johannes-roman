@@ -25,7 +25,7 @@ export function Comparison() {
     }, []);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "1000px", margin: "auto" }}>
+        <div className="MainContainer">
             <ComparisonTable allTravelData={allTravelData} />
             <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DURATION} />
             <Diagram allTravelDataUnformatted={diagramData} label={LabelType.DISTANCE} />

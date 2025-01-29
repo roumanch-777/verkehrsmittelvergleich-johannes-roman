@@ -11,7 +11,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTitle, Tooltip);
 function App() {
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "1000px", margin: "auto" }}>
+        <div className="MainContainer">
             <Title />
             <MessageDisplay />
             <Formular />
