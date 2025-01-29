@@ -5,7 +5,7 @@ const meansToTitle: Record<string, string> = {
     drive: "Auto",
     bicycle: "Fahrrad",
     walk: "Zu Fuss",
-    TwoWheeler: "Motorrad",
+    twoWheeler: "Motorrad",
     transit: "Öffentliche Verkehrsmittel",
 }
 
