@@ -31,14 +31,6 @@ export const formValidationHandler = () => {
             return false;
         }
 
-        if (!departureTime) {
-            eventBus.publish(Messages.FORM_ERROR, {
-                field: "departureTime",
-                message: "Bitte Abfahrtszeit angeben!"
-            });
-            return false;
-        }
-
         return true;
     };
 
