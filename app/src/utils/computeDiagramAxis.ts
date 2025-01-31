@@ -15,9 +15,16 @@ export const computeDurationAxis = (value: number | string) => {
     } else if (value >= (HOUR - 2.5 * MINUTE)) {  // 57.5min -> 1h
         // round on 30 min precision: round the double of the value, then divide by 2
         return `${Math.round((value / HOUR) * 2) / 2}h`;
-    } else {
+    } else if (value > (10 * MINUTE)) {
         // round on 5 min precision: round the 5th of the value, then multiply by 5
         return `${Math.round(value / (60 * 5)) * 5}min`;
+    } else if (value > (4 * MINUTE)) {
+        // round on 1 min precision: round the number
+        return `${Math.round(value / MINUTE)}min`;
+    }
+    else {
+        // round on 0.5 min precision: round the double, then divide by 2
+        return `${Math.round((value / MINUTE) * 2) / 2}min`;
     }
 };
 
