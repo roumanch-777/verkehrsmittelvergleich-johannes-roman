@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the command to start the app when the container launches
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

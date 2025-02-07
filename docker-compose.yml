@@ -8,4 +8,4 @@ services:
       - /usr/src/app/node_modules  # Prevents node_modules from being overwritten
     ports:
       - "3000:3000"
-    command: npm run dev
+    command: npm run start
