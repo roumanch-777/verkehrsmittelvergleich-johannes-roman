@@ -1,13 +1,11 @@
 services:
-  react-app:
-    image: "node:23.7.0"
-    working_dir: /home/app
-    environment:
-      - NODE_ENV=production
+  frontend:
+    container_name: react-app-dev
+    build:
+      context: .
     volumes:
-      - ./app/:/home/app
-    expose:
-      - "3000"
-    ports: # use if it is necessary to expose the container to the host machine
+      - .:/usr/src/app
+      - /usr/src/app/node_modules  # Prevents node_modules from being overwritten
+    ports:
       - "3000:3000"
-    command: "npm i; npm start"
+    command: npm run dev
