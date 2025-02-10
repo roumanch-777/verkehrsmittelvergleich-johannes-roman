@@ -4,7 +4,7 @@
 
 &nbsp;
 
-**WICHTIG: DIESES REPO IST NICHT MEHR AKTUELL.**
+**⚠️ WICHTIG: DIESES REPO IST NICHT MEHR AKTUELL. ⚠️**
 
 **EINE VERBESSERTE VERSION BEFINDET SICH AUF <https://github.com/jnussbaum/verkehrsmittelvergleich>**
 
