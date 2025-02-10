@@ -4,10 +4,9 @@
 
 &nbsp;
 
-<div style="color: red; font-weight: bold; text-align: center">
-WICHTIG: DIESES REPO IST NICHT MEHR AKTUELL.<br/><br/>
-EINE VERBESSERTE VERSION BEFINDET SICH AUF <https://github.com/jnussbaum/verkehrsmittelvergleich>
-</div>
+**WICHTIG: DIESES REPO IST NICHT MEHR AKTUELL.**
+
+**EINE VERBESSERTE VERSION BEFINDET SICH AUF <https://github.com/jnussbaum/verkehrsmittelvergleich>**
 
 &nbsp;
 
