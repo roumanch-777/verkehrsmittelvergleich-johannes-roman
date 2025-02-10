@@ -1,5 +1,8 @@
 # CAS Programmierarbeit: Verkehrsmittel-Vergleich 
 
+**WICHTIG: DIESES REPO IST NICHT MEHR AKTUELL.**
+**EINE VERBESSERTE VERSION BEFINDET SICH AUF <https://github.com/jnussbaum/verkehrsmittelvergleich>**
+
 Studenten: Roman Leuenberger, Johannes Nussbaum 
 
 Thematische Anbindung: Jürg Nietlispach: Funktionale Programmierung 
